@@ -8,7 +8,7 @@
 export type Language = 'de' | 'en';
 
 /** Which screen the single-page state machine is showing. */
-export type Phase = 'home' | 'lobby' | 'ingame' | 'summary';
+export type Phase = 'home' | 'lobby' | 'ingame' | 'summary' | 'stats';
 
 export interface Player {
 	id: string;

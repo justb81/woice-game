@@ -47,6 +47,19 @@ export type MessageKey =
 	| 'playAgain'
 	| 'backHome'
 	| 'points'
+	| 'stats'
+	| 'statsTitle'
+	| 'wins'
+	| 'favoriteLetters'
+	| 'bestStreak'
+	| 'bestCombo'
+	| 'roundsPlayed'
+	| 'statsEmpty'
+	| 'viewStats'
+	| 'resetStats'
+	| 'resetStatsConfirm'
+	| 'confirm'
+	| 'cancel'
 	| 'installTitle'
 	| 'installAction'
 	| 'updateTitle'
@@ -96,6 +109,19 @@ export const messages: Record<Language, Messages> = {
 		playAgain: 'Nochmal',
 		backHome: 'Zum Start',
 		points: 'Pkt.',
+		stats: 'Statistiken',
+		statsTitle: 'Statistiken',
+		wins: 'Siege',
+		favoriteLetters: 'Lieblingsbuchstaben',
+		bestStreak: 'Beste Serie',
+		bestCombo: 'Beste Kombo',
+		roundsPlayed: 'Gespielte Runden',
+		statsEmpty: 'Noch keine Runde gespielt. Spiel eine Runde, um Statistiken zu sammeln!',
+		viewStats: 'Statistiken',
+		resetStats: 'Statistiken zurücksetzen',
+		resetStatsConfirm: 'Wirklich alle Statistiken löschen?',
+		confirm: 'Ja',
+		cancel: 'Nein',
 		installTitle: 'Woice als App installieren?',
 		installAction: 'Installieren',
 		updateTitle: 'Eine neue Version ist verfügbar.',
@@ -142,6 +168,19 @@ export const messages: Record<Language, Messages> = {
 		playAgain: 'Play again',
 		backHome: 'Home',
 		points: 'pts',
+		stats: 'Stats',
+		statsTitle: 'Stats',
+		wins: 'Wins',
+		favoriteLetters: 'Favorite letters',
+		bestStreak: 'Best streak',
+		bestCombo: 'Best combo',
+		roundsPlayed: 'Rounds played',
+		statsEmpty: 'No rounds played yet. Play a round to start collecting stats!',
+		viewStats: 'Stats',
+		resetStats: 'Reset stats',
+		resetStatsConfirm: 'Really delete all stats?',
+		confirm: 'Yes',
+		cancel: 'No',
 		installTitle: 'Install Woice as an app?',
 		installAction: 'Install',
 		updateTitle: 'A new version is available.',

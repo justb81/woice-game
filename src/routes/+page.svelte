@@ -8,6 +8,7 @@
 	import LobbyScreen from '$lib/components/game/LobbyScreen.svelte';
 	import GameScreen from '$lib/components/game/GameScreen.svelte';
 	import SummaryScreen from '$lib/components/game/SummaryScreen.svelte';
+	import StatsScreen from '$lib/components/game/StatsScreen.svelte';
 </script>
 
 {#if gameSession.phase === 'home'}
@@ -18,4 +19,6 @@
 	<GameScreen />
 {:else if gameSession.phase === 'summary'}
 	<SummaryScreen />
+{:else if gameSession.phase === 'stats'}
+	<StatsScreen />
 {/if}

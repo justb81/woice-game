@@ -51,13 +51,20 @@
 		</p>
 	{/if}
 
-	<div class="flex justify-center gap-3">
+	<div class="flex flex-wrap justify-center gap-3">
 		<button
 			type="button"
 			onclick={() => gameSession.startGame()}
 			class="rounded-panel bg-accent-strong px-6 py-3 text-h1 font-semibold text-white hover:bg-accent"
 		>
 			{settings.t('playAgain')}
+		</button>
+		<button
+			type="button"
+			onclick={() => gameSession.goToStats()}
+			class="rounded-panel border border-line px-6 py-3 text-h1 font-medium text-slate-200 hover:bg-surface-raised"
+		>
+			{settings.t('viewStats')}
 		</button>
 		<button
 			type="button"

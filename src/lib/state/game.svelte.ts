@@ -12,6 +12,7 @@ import { DEFAULT_CONFIG, MAX_HISTORY } from '$lib/game/config.js';
 import { validateTurn } from '$lib/game/rules.js';
 import { scoreTurn, errorPenalty } from '$lib/game/score.js';
 import { assignPlayerColor } from '$lib/game/playerColors.js';
+import { stats } from './stats.svelte.js';
 
 /** How long the validation overlay stays on screen after a turn. */
 const OVERLAY_MS = 1200;
@@ -19,9 +20,34 @@ const OVERLAY_MS = 1200;
 /** Candidate start letters for a random opening (kept common so the first turn is easy). */
 const RANDOM_START_LETTERS = 'abdeghiklmnoprst'.split('');
 
+/** localStorage key for the persisted lobby roster (names + colours only, never live scores). */
+const ROSTER_KEY = 'woice.roster';
+
+/** Just the stable identity of a player that survives across rounds/reloads. */
+type RosterEntry = Pick<Player, 'name' | 'color'>;
+
+/**
+ * Restore the saved lobby roster as fresh, zero-scored players so a returning group keeps
+ * its line-up. Browser-guarded (empty off-browser) and defensive against corrupt storage.
+ */
+function loadRoster(): Player[] {
+	if (!browser) return [];
+	try {
+		const raw = localStorage.getItem(ROSTER_KEY);
+		if (!raw) return [];
+		const entries = JSON.parse(raw) as RosterEntry[];
+		if (!Array.isArray(entries)) return [];
+		return entries
+			.filter((e) => typeof e?.name === 'string' && typeof e?.color === 'string')
+			.map((e, i) => ({ id: `p${i + 1}`, name: e.name, score: 0, errors: 0, color: e.color }));
+	} catch {
+		return [];
+	}
+}
+
 class GameSession {
 	phase = $state<Phase>('home');
-	players = $state<Player[]>([]);
+	players = $state<Player[]>(loadRoster());
 	config = $state<GameConfig>({ ...DEFAULT_CONFIG });
 	turns = $state<Turn[]>([]);
 	currentIndex = $state(0);
@@ -35,6 +61,11 @@ class GameSession {
 	#turnStart = 0;
 	#timer: ReturnType<typeof setInterval> | undefined;
 	#overlayTimer: ReturnType<typeof setTimeout> | undefined;
+
+	constructor() {
+		// Keep new ids clear of any restored from the persisted roster.
+		this.#nextPlayerId = this.players.length + 1;
+	}
 
 	get currentPlayer(): Player | undefined {
 		return this.players[this.currentIndex];
@@ -89,20 +120,28 @@ class GameSession {
 			errors: 0,
 			color
 		});
+		this.#persistRoster();
 	}
 
 	removePlayer(id: string): void {
 		this.players = this.players.filter((p) => p.id !== id);
+		this.#persistRoster();
 	}
 
 	/** Override a player's accent colour (auto-assigned on join, editable in the lobby). */
 	setPlayerColor(id: string, color: string): void {
 		const player = this.players.find((p) => p.id === id);
 		if (player) player.color = color;
+		this.#persistRoster();
 	}
 
 	goToLobby(): void {
 		this.phase = 'lobby';
+	}
+
+	/** Open the long-term stats screen (reachable from Home and the round summary). */
+	goToStats(): void {
+		this.phase = 'stats';
 	}
 
 	// --- Round lifecycle -----------------------------------------------------
@@ -236,8 +275,22 @@ class GameSession {
 		if (done) {
 			this.#clearTimer();
 			this.phase = 'summary';
+			// Fold the finished round into long-term stats. Reached exactly once per round
+			// (submitWord early-returns once phase !== 'ingame'), with scores still intact.
+			stats.recordRound({ players: this.players, turns: this.turns });
 		}
 		return done;
+	}
+
+	/** Persist just the roster identity (names + colours) so a returning group keeps its line-up. */
+	#persistRoster(): void {
+		if (!browser) return;
+		try {
+			const entries: RosterEntry[] = this.players.map(({ name, color }) => ({ name, color }));
+			localStorage.setItem(ROSTER_KEY, JSON.stringify(entries));
+		} catch {
+			// Storage full or unavailable (private mode): roster persistence is best-effort.
+		}
 	}
 
 	#startTurnTimer(): void {

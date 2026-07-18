@@ -14,13 +14,23 @@
 		<p class="max-w-md text-body text-slate-400">{settings.t('tagline')}</p>
 	</div>
 
-	<button
-		type="button"
-		onclick={() => gameSession.goToLobby()}
-		class="rounded-panel bg-accent-strong px-10 py-4 text-h1 font-semibold text-white transition hover:bg-accent"
-	>
-		{settings.t('play')}
-	</button>
+	<div class="flex flex-col items-center gap-3">
+		<button
+			type="button"
+			onclick={() => gameSession.goToLobby()}
+			class="rounded-panel bg-accent-strong px-10 py-4 text-h1 font-semibold text-white transition hover:bg-accent"
+		>
+			{settings.t('play')}
+		</button>
+
+		<button
+			type="button"
+			onclick={() => gameSession.goToStats()}
+			class="rounded-panel border border-line px-6 py-2.5 text-body font-medium text-slate-200 transition hover:bg-surface-raised"
+		>
+			{settings.t('stats')}
+		</button>
+	</div>
 
 	<LanguageToggle />
 </main>
