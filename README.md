@@ -1,66 +1,66 @@
-# pwa_template
+# Woice
 
-A Svelte-based **Progressive Web App** template — the base setup for spinning up a new
-client-only PWA. It ships with the toolchain, PWA plumbing, and CI already wired together,
-so a new project starts from a green build instead of a blank folder.
+**Woice** is a voice-first word-chain party game you play together on one device. Take turns saying
+(or typing) a word that starts with the **last letter of the previous word** — the app listens,
+checks the rules, scores every move and keeps the round flowing, so nobody has to write words down,
+watch the clock or count points.
 
-## Stack
+> 🎮 **[Play now → justb81.github.io/woice-game](https://justb81.github.io/woice-game/)**
+>
+> Runs entirely in your browser. Installable as an app, works offline, no account, no backend.
 
-- **[SvelteKit](https://svelte.dev/docs/kit)** + **[Svelte 5](https://svelte.dev/docs/svelte)** (forced runes mode)
-- **[Tailwind CSS 4](https://tailwindcss.com)** with `@tailwindcss/forms` and semantic design tokens
-- **[adapter-static](https://svelte.dev/docs/kit/adapter-static)** — a fully client-only, prerendered site (no server)
-- **[Vitest](https://vitest.dev)** for unit tests, **ESLint** + **Prettier** for lint/format
-- **TypeScript** throughout
+## How to play
 
-## What's included
+1. Open the game and add **2 or more players**.
+2. Pick your options — language (Deutsch / English), turn time, target score and how strict the
+   rules are.
+3. On your turn, **say or type** a word beginning with the highlighted start letter.
+4. Woice validates the word, awards points and passes the turn to the next player.
+5. The round ends on the target score, the error limit or the timer — then the scoreboard shows
+   the winner, highlights and the longest word.
 
-- **Installable PWA** — web manifest, standalone display, maskable icons, `theme-color`.
-- **Offline support** — a cache-first service worker (`src/service-worker.ts`) that precaches
-  the app shell, with an **opt-in update banner** (`$lib/state/update.svelte.ts`) instead of a
-  silent mid-session takeover.
-- **App-wide toasts** — `$lib/state/toast.svelte.ts` + `Toast.svelte`.
-- **Window Controls Overlay** support for installed desktop apps (`$lib/state/windowChrome.svelte.ts`).
-- **Semantic design tokens** — color / type / radius aliases onto Tailwind's palette in `layout.css`.
-- **CI/CD** (already present under `.github/`) — lint/check/test/build on every PR, Dependabot,
-  release-please, and deploy-to-GitHub-Pages on release.
-- **Editor + agent config** — `.vscode/` recommended extensions and a `.claude/` + `CLAUDE.md` for
-  working in the repo with [Claude Code](https://claude.com/claude-code).
+Say the word out loud (speech recognition, where the browser supports it) or just type it — the
+same rules and scoring apply either way.
 
-## Quick start
+## Scoring in short
+
+Every valid word earns **base points**, plus bonuses that reward good play:
+
+- **Length bonus** — longer words score more.
+- **End-letter rarity** — ending on a rare, hard-to-continue letter (Q, X, Y …) pays off.
+- **Tempo bonus** — answer early in the timer for extra points.
+- **Combo** — chain valid turns without a mistake to build a streak.
+
+Invalid turns (wrong start letter, too short, or a word already used) cost points and count toward
+the error limit.
+
+## Rules & languages
+
+- **Languages:** German and English, with a per-language letter-rarity model. The UI language also
+  drives the speech recogniser locale.
+- **Strictness:** three profiles so the game never feels unfair —
+  - `locker` — umlauts fold to their base vowel and ß ≈ ss/s;
+  - `standard` — case-insensitive, umlauts stay distinct;
+  - `streng` — letters must match exactly (ä ≠ a).
+
+## Install as an app (PWA)
+
+Woice is a Progressive Web App: open the link, then use your browser's **Install / Add to Home
+Screen** action. Once installed it launches like a native app and keeps working **offline**.
+
+## Development
+
+Woice is a client-only SvelteKit + Svelte 5 + Tailwind 4 app — no backend, everything runs in the
+browser and the production build is a static site.
 
 ```bash
 npm install      # install dependencies
-npm run dev      # start the dev server (http://localhost:5173)
-npm run build    # produce the static site in build/
+npm run dev      # dev server at http://localhost:5173
+npm run build    # static site in build/
 npm run preview  # serve the production build locally
 ```
 
 Requires Node 22+ (CI runs on Node 26).
-
-## Project structure
-
-```
-src/
-  app.html                  # HTML shell: manifest link, theme-color, viewport
-  app.d.ts                  # ambient types (incl. Window Controls Overlay)
-  service-worker.ts         # cache-first offline precache + update handshake
-  routes/
-    +layout.svelte          # SW registration, update banner, global <Toast/>
-    +layout.ts              # ssr = false, prerender = true (client-only static)
-    +page.svelte            # placeholder starter page — replace this
-    layout.css              # Tailwind import + semantic design tokens
-  lib/
-    components/ui/Toast.svelte
-    state/                  # Svelte 5 runes singletons (browser-guarded)
-      toast.svelte.ts       #   transient notifications
-      update.svelte.ts      #   service-worker update detection
-      windowChrome.svelte.ts#   Window Controls Overlay state
-    utils/greeting.{ts,spec.ts}  # example pure logic + test — delete when real code lands
-static/                     # manifest.webmanifest, placeholder icons, robots.txt
-.github/                    # CI, Dependabot, release-please, GitHub Pages deploy
-```
-
-## Commands
 
 | Task             | Command                                         |
 | ---------------- | ----------------------------------------------- |
@@ -72,43 +72,39 @@ static/                     # manifest.webmanifest, placeholder icons, robots.tx
 | Lint             | `npm run lint`                                  |
 | Format           | `npm run format`                                |
 
-Tests run under Vitest's `server` (Node) project, which matches `src/**/*.{test,spec}.{js,ts}`
-(not `*.svelte.{test,spec}.*`). `requireAssertions` is on — every test must assert at least once.
+### Architecture
 
-## Using this template
+The game logic is split into pure, Node-tested engines and browser-only state:
 
-1. **Create a repo from this template** (or clone it) and `npm install`.
-2. **Rename the project** — update `name` in `package.json`, `package-name` in
-   `release-please-config.json`, the `name`/`short_name`/`description` in
-   `static/manifest.webmanifest`, and the cache prefix / build-log tag (`pwa-` / `[pwa]`) in
-   `src/service-worker.ts` and `src/routes/+layout.svelte`.
-3. **Replace the placeholder icons** in `static/` (`pwa-icon*.svg` / `pwa-icon*.png`) and the
-   `theme-color` in `src/app.html` + the manifest with your brand.
-4. **Retune the design tokens** at the top of `src/routes/layout.css` for your palette.
-5. **Start building** in `src/routes/+page.svelte` and `src/lib/`. Delete the example
-   `src/lib/utils/greeting.*`.
-6. **Update `CLAUDE.md`** to describe your app's own architecture as it grows.
+```
+src/lib/
+  game/        # pure, framework-free engine (each with a *.spec.ts)
+    types.ts        # shared types
+    normalize.ts    # Unicode-aware word cleanup (keeps äöüß)
+    rules.ts        # validateTurn — start letter / min length / duplicate
+    score.ts        # scoreTurn — base + length + rarity + tempo + combo
+    letterValues.ts # per-language rarity model (de/en)
+    config.ts       # tunables
+  i18n/messages.ts  # de/en UI strings + speechLocale()
+  state/            # Svelte 5 runes singletons (browser-guarded)
+    settings.svelte.ts   # language & preferences
+    game.svelte.ts       # session engine: phases, timer, submitWord funnel
+    speech.svelte.ts     # Web Speech API adapter → silent text fallback
+  components/game/  # presentational screens & widgets
+src/routes/+page.svelte  # single {#if} switch on gameSession.phase
+```
 
-### GitHub Pages / release flow
+Pure logic lives in plain `.ts` files (unit-tested under Vitest's Node project); anything touching
+the DOM or browser APIs stays in `.svelte.ts` singletons behind a `browser` guard. See
+[`CLAUDE.md`](./CLAUDE.md) for the full conventions and [`docs/design.md`](./docs/design.md) for the
+product concept and roadmap.
 
-The deploy workflow builds with `BASE_PATH` set to the repo's Pages subpath and publishes on
-each GitHub Release. release-please raises the version/changelog PR from
-[Conventional Commits](https://www.conventionalcommits.org); merging it tags a release, which
-triggers the deploy. The release-please workflow expects a `RELEASE_TOKEN` repository secret (a PAT)
-so the created release can trigger the deploy workflow — see the comment in
-`.github/workflows/release-please.yml`. Enable **Settings → Pages → Source: GitHub Actions** in the
-new repo before the first release.
+## Roadmap
 
-## Conventions & gotchas
-
-- **There is no `svelte.config.js`.** SvelteKit config (the static adapter and the forced-runes
-  `compilerOptions`) lives inside the `sveltekit()` call in `vite.config.ts`.
-- **Runes are forced on** for all app code. Use `$state` / `$derived` / `$props`; stores are plain
-  classes in `.svelte.ts` files exported as singletons.
-- **Relative imports use explicit `.js` extensions** (tsconfig `rewriteRelativeImportExtensions`).
-  Use the `$lib` alias for `src/lib`.
-- **Nothing touching the DOM may run at module top-level during SSR/prerender.** Guard with
-  `browser` from `$app/environment` and feature-detect optional browser APIs.
+Woice is an early MVP: local pass-and-play with voice/text input, validation and scoring is in
+place. Planned directions — category & team modes, themes, stats, online rooms and a native Android
+build — are tracked as [issues](https://github.com/justb81/woice-game/issues); see
+[`docs/design.md`](./docs/design.md) for the vision behind them.
 
 ## License
 
