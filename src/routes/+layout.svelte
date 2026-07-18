@@ -10,7 +10,7 @@
 	if (browser) {
 		// A distinct value per `vite dev`/`vite build` run — paste this when reporting a
 		// bug, so we can tell whether the browser is actually running the build being debugged.
-		console.info(`[pwa] build ${version}`);
+		console.info(`[woice] build ${version}`);
 
 		if (dev) {
 			// Registration is disabled in dev (see vite.config.ts): a cache-first worker

@@ -1,8 +1,8 @@
 {
 	"id": "/",
-	"name": "PWA Template",
-	"short_name": "PWA",
-	"description": "A SvelteKit + Svelte 5 + Tailwind 4 progressive web app.",
+	"name": "Woice",
+	"short_name": "Woice",
+	"description": "The voice-first word-chain party game.",
 	"start_url": ".",
 	"scope": ".",
 	"display_override": ["window-controls-overlay", "standalone"],
