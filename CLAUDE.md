@@ -49,8 +49,8 @@ DOM/browser access in the `.svelte.ts` singletons behind the `browser` guard.
 | Type-check          | `npm run check` (runs `svelte-kit sync` + `svelte-check`)  |
 | Unit tests (once)   | `npm test`                                                 |
 | Unit tests (watch)  | `npm run test:unit`                                        |
-| Single test file    | `npx vitest run src/lib/utils/greeting.spec.ts`            |
-| Single test by name | `npx vitest run -t "greets a given name"`                  |
+| Single test file    | `npx vitest run src/lib/game/rules.spec.ts`                |
+| Single test by name | `npx vitest run -t "accepts a valid word"`                 |
 | Lint                | `npm run lint` (prettier `--check` + eslint)               |
 | Format              | `npm run format`                                           |
 
@@ -66,8 +66,9 @@ The template is deliberately thin. Three areas:
    `src/routes/+page.svelte`, `src/routes/layout.css`.
    `+layout.ts` sets `ssr = false` + `prerender = true` (client-only static site). `+layout.svelte`
    registers the service worker in production (and sheds any stale worker in dev), renders the
-   update banner, and mounts the global `<Toast />`. `+page.svelte` is a placeholder starter page —
-   replace it. `layout.css` holds the Tailwind import plus **semantic design tokens** (color / type /
+   update banner, and mounts the global `<Toast />`. `+page.svelte` is the game's single-page `{#if}`
+   switch on `gameSession.phase` (see the Woice section above). `layout.css` holds the Tailwind import
+   plus **semantic design tokens** (color / type /
    radius aliases onto Tailwind's palette, e.g. `bg-accent-strong`, `text-danger`) — retune the
    palette there for a new app.
 
@@ -85,10 +86,10 @@ The template is deliberately thin. Three areas:
      (installed Chromium-desktop only) for drawing the app header into the OS titlebar; paired with
      the `.app-header[data-wco='true']` block in `layout.css`. Inert everywhere else.
 
-3. **Example pure logic** — `src/lib/utils/greeting.{ts,spec.ts}`.
-   A trivial pure helper + its Vitest spec, showing the Node-testable pattern: pure, framework-free
-   logic lives in plain `.ts` files (matched by the `server` test project), while anything touching
-   the DOM/browser APIs stays in `.svelte.ts` / components. Delete both once you have real code.
+3. **Game logic** — `src/lib/game/*.ts` (see the Woice section above for the full breakdown).
+   These show the Node-testable pattern the template is built around: pure, framework-free logic
+   lives in plain `.ts` files (each with a `*.spec.ts`, matched by the `server` test project), while
+   anything touching the DOM/browser APIs stays in `.svelte.ts` singletons / components.
 
 ### State (Svelte 5 runes singletons)
 
