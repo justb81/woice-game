@@ -8,9 +8,9 @@
  * regardless of which component is using it. Retune the palette here for a new app.
  */
 @theme {
-	--color-accent: var(--color-sky-500);
-	--color-accent-strong: var(--color-sky-600);
-	--color-accent-soft: var(--color-sky-400);
+	--color-accent: var(--color-violet-500);
+	--color-accent-strong: var(--color-violet-600);
+	--color-accent-soft: var(--color-violet-400);
 
 	--color-success: var(--color-emerald-500);
 	--color-success-strong: var(--color-emerald-600);

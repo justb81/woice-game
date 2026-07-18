@@ -106,8 +106,10 @@ in non-supporting environments (`browser` from `$app/environment`, plus feature 
   registration is off — see `vite.config.ts`); it precaches the shell and static assets cache-first.
   The manifest link and `theme-color` are in `src/app.html`; assets are `static/manifest.webmanifest`
   and `static/pwa-icon*`.
-- **Installable.** `static/manifest.webmanifest` declares name/icons/display; the icons are
-  **placeholders** — replace the SVG + maskable PNGs (192/512) for a real app.
+- **Installable.** `static/manifest.webmanifest` declares name/icons/display. The icons are
+  Woice's own brand — the "voicewave" mark in `static/pwa-icon.svg` + `pwa-icon-maskable.svg`; the
+  192/512 normal + maskable PNGs are rendered from those SVGs by `npm run icons:render`
+  (`scripts/render-icons.mjs`, via `@resvg/resvg-js`), so re-run it after editing either SVG.
 
 ## CI / release
 
