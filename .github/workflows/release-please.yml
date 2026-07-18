@@ -1,0 +1,22 @@
+name: Release Please
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v5
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+          # Releases created with the default GITHUB_TOKEN can't trigger other
+          # workflows (GitHub's anti-recursion guard) — deploy.yml listens for
+          # `release: published` and would never fire without this PAT.
+          token: ${{ secrets.RELEASE_TOKEN }}
