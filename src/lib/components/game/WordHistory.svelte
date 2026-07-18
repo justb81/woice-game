@@ -2,8 +2,8 @@
 	import { settings } from '$lib/state/settings.svelte.js';
 	import { gameSession } from '$lib/state/game.svelte.js';
 
-	function playerName(id: string): string {
-		return gameSession.players.find((p) => p.id === id)?.name ?? '';
+	function player(id: string) {
+		return gameSession.players.find((p) => p.id === id);
 	}
 </script>
 
@@ -14,10 +14,15 @@
 	{:else}
 		<ul class="flex flex-col gap-1.5">
 			{#each gameSession.recentTurns as turn (turn.id)}
-				<li class="flex items-center justify-between rounded-control bg-surface px-3 py-1.5">
+				<li
+					class="flex items-center justify-between rounded-control bg-surface px-3 py-1.5"
+					style="border-left: 3px solid {player(turn.playerId)?.color ?? 'transparent'}"
+				>
 					<span class="text-body text-slate-100">
 						<span class="font-semibold capitalize">{turn.normalizedWord}</span>
-						<span class="ml-2 text-caption text-slate-500">{playerName(turn.playerId)}</span>
+						<span class="ml-2 text-caption" style="color: {player(turn.playerId)?.color ?? ''}"
+							>{player(turn.playerId)?.name ?? ''}</span
+						>
 					</span>
 					<span class="text-label font-bold text-success tabular-nums">
 						+{turn.breakdown?.total ?? 0}

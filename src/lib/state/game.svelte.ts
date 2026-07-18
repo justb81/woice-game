@@ -11,6 +11,7 @@ import type { GameConfig, Phase, Player, Turn, ValidationResult } from '$lib/gam
 import { DEFAULT_CONFIG, MAX_HISTORY } from '$lib/game/config.js';
 import { validateTurn } from '$lib/game/rules.js';
 import { scoreTurn, errorPenalty } from '$lib/game/score.js';
+import { assignPlayerColor } from '$lib/game/playerColors.js';
 
 /** How long the validation overlay stays on screen after a turn. */
 const OVERLAY_MS = 1200;
@@ -80,11 +81,24 @@ class GameSession {
 	addPlayer(name: string): void {
 		const trimmed = name.trim();
 		if (trimmed === '') return;
-		this.players.push({ id: `p${this.#nextPlayerId++}`, name: trimmed, score: 0, errors: 0 });
+		const color = assignPlayerColor(this.players.map((p) => p.color));
+		this.players.push({
+			id: `p${this.#nextPlayerId++}`,
+			name: trimmed,
+			score: 0,
+			errors: 0,
+			color
+		});
 	}
 
 	removePlayer(id: string): void {
 		this.players = this.players.filter((p) => p.id !== id);
+	}
+
+	/** Override a player's accent colour (auto-assigned on join, editable in the lobby). */
+	setPlayerColor(id: string, color: string): void {
+		const player = this.players.find((p) => p.id === id);
+		if (player) player.color = color;
 	}
 
 	goToLobby(): void {

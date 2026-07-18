@@ -58,19 +58,17 @@ describe('validateTurn', () => {
 });
 
 describe('lettersMatch', () => {
-	it('streng requires an exact match and rejects ä vs a', () => {
-		expect(lettersMatch('ä', 'a', 'streng')).toBe(false);
-		expect(lettersMatch('a', 'a', 'streng')).toBe(true);
+	it('is case-insensitive', () => {
+		expect(lettersMatch('A', 'a')).toBe(true);
 	});
 
-	it('standard is case-insensitive but keeps umlauts distinct', () => {
-		expect(lettersMatch('A', 'a', 'standard')).toBe(true);
-		expect(lettersMatch('ä', 'a', 'standard')).toBe(false);
+	it('folds umlauts to their base vowel and ß to s', () => {
+		expect(lettersMatch('ä', 'a')).toBe(true);
+		expect(lettersMatch('ü', 'u')).toBe(true);
+		expect(lettersMatch('ß', 's')).toBe(true);
 	});
 
-	it('locker folds umlauts to their base vowel and ß to s', () => {
-		expect(lettersMatch('ä', 'a', 'locker')).toBe(true);
-		expect(lettersMatch('ü', 'u', 'locker')).toBe(true);
-		expect(lettersMatch('ß', 's', 'locker')).toBe(true);
+	it('still rejects genuinely different letters', () => {
+		expect(lettersMatch('a', 'b')).toBe(false);
 	});
 });

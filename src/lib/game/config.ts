@@ -26,7 +26,6 @@ export const ERROR_PENALTY = 3;
 /** Sensible defaults for a fresh lobby. */
 export const DEFAULT_CONFIG: GameConfig = {
 	language: 'en',
-	strictness: 'standard',
 	minLength: 2,
 	turnSeconds: 30,
 	targetScore: 100,

@@ -13,7 +13,10 @@
 		<span class="text-caption tracking-widest text-slate-500 uppercase">
 			{gameSession.hasUniqueLeader ? settings.t('winner') : settings.t('tie')}
 		</span>
-		<span class="text-4xl font-black text-accent-soft">
+		<span
+			class="text-4xl font-black"
+			style={gameSession.hasUniqueLeader ? `color: ${gameSession.leader?.color}` : ''}
+		>
 			{gameSession.hasUniqueLeader ? (gameSession.leader?.name ?? '') : '🤝'}
 		</span>
 	</div>
@@ -21,14 +24,19 @@
 	<ol class="flex flex-col gap-2 text-left">
 		{#each ranked as player, i (player.id)}
 			<li
-				class="flex items-center justify-between rounded-control border px-4 py-3
-					{i === 0 ? 'border-accent bg-accent-strong/15' : 'border-line bg-surface'}"
+				class="flex items-center justify-between rounded-control border bg-surface px-4 py-3"
+				style="border-left: 4px solid {player.color}"
 			>
 				<span class="flex items-center gap-3">
 					<span class="text-label font-bold text-slate-500 tabular-nums">{i + 1}</span>
+					<span
+						class="size-2.5 rounded-full"
+						style="background-color: {player.color}"
+						aria-hidden="true"
+					></span>
 					<span class="text-body font-medium text-slate-100">{player.name}</span>
 				</span>
-				<span class="text-h2 font-bold text-accent-soft tabular-nums">
+				<span class="text-h2 font-bold tabular-nums" style="color: {player.color}">
 					{player.score}
 					<span class="text-caption font-normal text-slate-500">{settings.t('points')}</span>
 				</span>
