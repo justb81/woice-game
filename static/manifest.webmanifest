@@ -9,7 +9,7 @@
 	"display": "standalone",
 	"orientation": "any",
 	"background_color": "#020617",
-	"theme_color": "#0284c7",
+	"theme_color": "#7c3aed",
 	"launch_handler": {
 		"client_mode": "focus-existing"
 	},

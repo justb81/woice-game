@@ -1,4 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Woice">
-  <rect width="512" height="512" fill="#0284c7"/>
-  <path d="M280 150 184 294h56l-18 96 128-160h-62z" fill="#ffffff"/>
+  <defs>
+    <linearGradient id="gm" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#818cf8" />
+      <stop offset="1" stop-color="#6d28d9" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#gm)" />
+  <g fill="none" stroke-linecap="round" stroke-width="34" transform="translate(256 256) scale(0.82) translate(-256 -256)">
+    <path d="M118 205V307" stroke="#ffffff" />
+    <path d="M177 150V362" stroke="#ffffff" />
+    <path d="M236 234V278" stroke="#c4b5fd" />
+    <path d="M276 234V278" stroke="#c4b5fd" />
+    <path d="M335 150V362" stroke="#ffffff" />
+    <path d="M394 205V307" stroke="#ffffff" />
+  </g>
 </svg>
