@@ -18,7 +18,7 @@ import { build, files, version } from '$service-worker';
 
 const sw = self as unknown as ServiceWorkerGlobalScope;
 
-const CACHE = `pwa-${version}`;
+const CACHE = `woice-${version}`;
 const PRECACHE = [...build, ...files];
 
 sw.addEventListener('install', (event) => {

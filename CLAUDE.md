@@ -10,8 +10,34 @@ worker, opt-in update flow), and CI are already wired together, so a new project
 build. There is **no backend** — adapter-static emits a prerendered shell that hydrates and then runs
 entirely in the browser.
 
-When a real app is built on top of this template, extend this file to describe that app's own
-architecture — the sections below document the base the app inherits.
+This template now hosts **Woice**, a voice-first word-chain party game (see `docs/design.md` for the
+full product concept). The sections below document the base the app inherits; the **Woice** section
+that follows documents the game built on top of it.
+
+## Woice (the game)
+
+A local **pass-and-play** word-chain round on one device: 2+ players take turns saying (or typing) a
+word that starts with the last letter of the previous word. The app validates each move, scores it,
+and tracks the round — no backend, everything runs client-side.
+
+Layering mirrors the template's split (pure `.ts` vs. runes `.svelte.ts`):
+
+- **`src/lib/game/*.ts`** — pure, framework-free, Node-tested engine (each has a `*.spec.ts`):
+  `types.ts` (shared types), `normalize.ts` (Unicode-aware word cleanup, keeps äöüß),
+  `rules.ts` (`validateTurn` — start letter / min length / duplicate, with `locker/standard/streng`
+  strictness), `score.ts` (`scoreTurn` — base + length + end-letter rarity + tempo + combo),
+  `letterValues.ts` (per-language rarity model, de/en), `config.ts` (tunables).
+- **`src/lib/i18n/messages.ts`** — pure de/en UI string catalogues + `speechLocale()` (BCP-47).
+- **`src/lib/state/*.svelte.ts`** — runes singletons: `settings` (language, browser-default +
+  localStorage), `gameSession` (the Session Engine: phase machine, turn timer, `submitWord` funnel for
+  **both** voice and text), `speechInput` (Web Speech API adapter, feature-detected → silent text
+  fallback).
+- **`src/lib/components/game/*.svelte`** — presentational screens/widgets; `+page.svelte` is a single
+  `{#if}` switch on `gameSession.phase` (`home → lobby → ingame → summary`). No extra routes (the
+  client-only prerendered shell has no server to hydrate per-route state).
+
+Add game logic as pure functions under `src/lib/game/` (with specs) whenever possible; keep
+DOM/browser access in the `.svelte.ts` singletons behind the `browser` guard.
 
 ## Commands
 
