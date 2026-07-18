@@ -4,6 +4,13 @@
 	import { browser, dev, version } from '$app/environment';
 	import { base } from '$app/paths';
 	import { updateStatus } from '$lib/state/update.svelte.js';
+	import { installPrompt } from '$lib/state/install.svelte.js';
+	import { settings } from '$lib/state/settings.svelte.js';
+
+	// An update is offered whenever a new worker is waiting (installed app or open tab); the
+	// install prompt only when the app isn't installed yet. Update takes precedence.
+	const showUpdate = $derived(updateStatus.available);
+	const showInstall = $derived(!showUpdate && installPrompt.available && !installPrompt.installed);
 
 	let { children } = $props();
 
@@ -28,18 +35,40 @@
 
 <svelte:head><link rel="icon" href="{base}/pwa-icon.svg" /></svelte:head>
 
-{#if updateStatus.available}
-	<div
-		class="fixed inset-x-0 bottom-0 z-50 flex items-center justify-center gap-4 bg-accent-strong px-4 py-2 text-sm text-white"
-	>
-		<span>A new version is available.</span>
-		<button
-			type="button"
-			onclick={() => updateStatus.reload()}
-			class="rounded bg-white px-3 py-1 font-medium text-sky-700 hover:bg-slate-100"
+{#if showUpdate || showInstall}
+	<div class="fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 pb-4">
+		<div
+			class="flex w-full max-w-md items-center gap-3 rounded-panel border border-line-strong bg-surface-raised px-4 py-3 shadow-lg"
+			role="status"
 		>
-			Reload
-		</button>
+			<span class="flex-1 text-body text-slate-100">
+				{showUpdate ? settings.t('updateTitle') : settings.t('installTitle')}
+			</span>
+			{#if showUpdate}
+				<button
+					type="button"
+					onclick={() => updateStatus.reload()}
+					class="rounded-control bg-accent-strong px-4 py-2 text-label font-semibold text-white hover:bg-accent"
+				>
+					{settings.t('updateAction')}
+				</button>
+			{:else}
+				<button
+					type="button"
+					onclick={() => installPrompt.dismiss()}
+					class="rounded-control px-3 py-2 text-label font-medium text-slate-400 hover:text-slate-200"
+				>
+					{settings.t('dismiss')}
+				</button>
+				<button
+					type="button"
+					onclick={() => installPrompt.install()}
+					class="rounded-control bg-accent-strong px-4 py-2 text-label font-semibold text-white hover:bg-accent"
+				>
+					{settings.t('installAction')}
+				</button>
+			{/if}
+		</div>
 	</div>
 {/if}
 

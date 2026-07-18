@@ -7,14 +7,6 @@
 /** UI + word-model language. The letter-value model and speech recogniser both key off this. */
 export type Language = 'de' | 'en';
 
-/**
- * How forgiving the start-letter match is:
- * - `streng`  — letters must be identical (ä ≠ a).
- * - `standard`— case-insensitive, but umlauts stay distinct.
- * - `locker`  — umlauts fold to their base vowel and ß ≈ ss/s.
- */
-export type Strictness = 'locker' | 'standard' | 'streng';
-
 /** Which screen the single-page state machine is showing. */
 export type Phase = 'home' | 'lobby' | 'ingame' | 'summary';
 
@@ -24,14 +16,15 @@ export interface Player {
 	score: number;
 	/** Invalid turns this player has made; the round ends when someone hits `errorLimit`. */
 	errors: number;
+	/** Player accent colour (hex). Auto-assigned on join, editable in the lobby. */
+	color: string;
 }
 
 export interface GameConfig {
 	language: Language;
-	strictness: Strictness;
 	/** Minimum letters a word must have to count. */
 	minLength: number;
-	/** Length of a player's turn window in seconds. */
+	/** Length of a player's turn window in seconds. `0` disables the per-turn timer. */
 	turnSeconds: number;
 	/** Round ends once any player reaches this score. */
 	targetScore: number;

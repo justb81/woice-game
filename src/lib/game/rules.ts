@@ -4,26 +4,22 @@
  * starts with the required letter, and hasn't been played this session.
  */
 
-import type { GameConfig, Strictness, ValidationResult } from './types.js';
+import type { GameConfig, ValidationResult } from './types.js';
 import { normalizeWord, firstLetter, lastLetter } from './normalize.js';
 
-/** Fold a letter for `locker` matching: umlauts → base vowel, ß → s. */
+/** Fold a letter for lenient matching: umlauts → base vowel, ß → s. */
 function fold(letter: string): string {
 	const map: Record<string, string> = { ä: 'a', ö: 'o', ü: 'u', ß: 's' };
 	return map[letter] ?? letter;
 }
 
 /**
- * Do two (already single-letter) values count as the same start letter under the
- * given strictness? `streng` needs an exact match; `standard` lowercases both;
- * `locker` additionally folds umlauts and ß onto their base letters.
+ * Do two (already single-letter) values count as the same start letter? Matching is
+ * always lenient: case-insensitive, with umlauts folded onto their base vowel and ß → s,
+ * so ä ≈ a and Ößi ≈ s — the most forgiving option, best for a spoken party game.
  */
-export function lettersMatch(a: string, b: string, strictness: Strictness): boolean {
-	if (strictness === 'streng') return a === b;
-	const x = a.toLowerCase();
-	const y = b.toLowerCase();
-	if (strictness === 'standard') return x === y;
-	return fold(x) === fold(y);
+export function lettersMatch(a: string, b: string): boolean {
+	return fold(a.toLowerCase()) === fold(b.toLowerCase());
 }
 
 export interface ValidateTurnInput {
@@ -55,10 +51,7 @@ export function validateTurn({
 		return { valid: false, reason: 'too-short', normalizedWord, endLetter: '' };
 	}
 
-	if (
-		requiredStart !== '' &&
-		!lettersMatch(firstLetter(normalizedWord), requiredStart, config.strictness)
-	) {
+	if (requiredStart !== '' && !lettersMatch(firstLetter(normalizedWord), requiredStart)) {
 		return { valid: false, reason: 'wrong-start', normalizedWord, endLetter: '' };
 	}
 

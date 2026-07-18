@@ -5,7 +5,7 @@
  * a spec that diffs the key lists.
  */
 
-import type { Language, Strictness, ValidationError } from '../game/types.js';
+import type { Language, ValidationError } from '../game/types.js';
 
 export type MessageKey =
 	| 'appName'
@@ -16,12 +16,10 @@ export type MessageKey =
 	| 'players'
 	| 'addPlayer'
 	| 'playerNamePlaceholder'
+	| 'playerColor'
 	| 'remove'
 	| 'settings'
-	| 'strictness'
-	| 'strictnessLocker'
-	| 'strictnessStandard'
-	| 'strictnessStreng'
+	| 'timeLimit'
 	| 'turnSeconds'
 	| 'minLength'
 	| 'startLetter'
@@ -33,6 +31,7 @@ export type MessageKey =
 	| 'score'
 	| 'listen'
 	| 'listening'
+	| 'typeInstead'
 	| 'wordPlaceholder'
 	| 'submit'
 	| 'history'
@@ -47,7 +46,12 @@ export type MessageKey =
 	| 'longestWord'
 	| 'playAgain'
 	| 'backHome'
-	| 'points';
+	| 'points'
+	| 'installTitle'
+	| 'installAction'
+	| 'updateTitle'
+	| 'updateAction'
+	| 'dismiss';
 
 export type Messages = Record<MessageKey, string>;
 
@@ -61,12 +65,10 @@ export const messages: Record<Language, Messages> = {
 		players: 'Spieler',
 		addPlayer: 'Hinzufügen',
 		playerNamePlaceholder: 'Spielername',
+		playerColor: 'Spielerfarbe',
 		remove: 'Entfernen',
 		settings: 'Einstellungen',
-		strictness: 'Regelstrenge',
-		strictnessLocker: 'Locker',
-		strictnessStandard: 'Standard',
-		strictnessStreng: 'Streng',
+		timeLimit: 'Zeitlimit pro Zug',
 		turnSeconds: 'Zeit pro Zug (Sek.)',
 		minLength: 'Mindestlänge',
 		startLetter: 'Startbuchstabe',
@@ -78,6 +80,7 @@ export const messages: Record<Language, Messages> = {
 		score: 'Punkte',
 		listen: 'Sprechen',
 		listening: 'Höre zu …',
+		typeInstead: 'Lieber tippen',
 		wordPlaceholder: 'Wort eingeben',
 		submit: 'Absenden',
 		history: 'Wortverlauf',
@@ -92,7 +95,12 @@ export const messages: Record<Language, Messages> = {
 		longestWord: 'Längstes Wort',
 		playAgain: 'Nochmal',
 		backHome: 'Zum Start',
-		points: 'Pkt.'
+		points: 'Pkt.',
+		installTitle: 'Woice als App installieren?',
+		installAction: 'Installieren',
+		updateTitle: 'Eine neue Version ist verfügbar.',
+		updateAction: 'Aktualisieren',
+		dismiss: 'Später'
 	},
 	en: {
 		appName: 'Woice',
@@ -103,12 +111,10 @@ export const messages: Record<Language, Messages> = {
 		players: 'Players',
 		addPlayer: 'Add',
 		playerNamePlaceholder: 'Player name',
+		playerColor: 'Player colour',
 		remove: 'Remove',
 		settings: 'Settings',
-		strictness: 'Rule strictness',
-		strictnessLocker: 'Loose',
-		strictnessStandard: 'Standard',
-		strictnessStreng: 'Strict',
+		timeLimit: 'Time limit per turn',
 		turnSeconds: 'Time per turn (sec)',
 		minLength: 'Minimum length',
 		startLetter: 'Start letter',
@@ -120,6 +126,7 @@ export const messages: Record<Language, Messages> = {
 		score: 'Score',
 		listen: 'Speak',
 		listening: 'Listening …',
+		typeInstead: 'Type instead',
 		wordPlaceholder: 'Type a word',
 		submit: 'Submit',
 		history: 'Word history',
@@ -134,7 +141,12 @@ export const messages: Record<Language, Messages> = {
 		longestWord: 'Longest word',
 		playAgain: 'Play again',
 		backHome: 'Home',
-		points: 'pts'
+		points: 'pts',
+		installTitle: 'Install Woice as an app?',
+		installAction: 'Install',
+		updateTitle: 'A new version is available.',
+		updateAction: 'Update',
+		dismiss: 'Later'
 	}
 };
 
@@ -144,13 +156,6 @@ export const validationMessageKey: Record<ValidationError, MessageKey> = {
 	'too-short': 'errorTooShort',
 	'wrong-start': 'errorWrongStart',
 	duplicate: 'errorDuplicate'
-};
-
-/** Message key for a strictness value (for the lobby selector labels). */
-export const strictnessMessageKey: Record<Strictness, MessageKey> = {
-	locker: 'strictnessLocker',
-	standard: 'strictnessStandard',
-	streng: 'strictnessStreng'
 };
 
 /** BCP-47 tag the Web Speech API should recognise in for a given app language. */

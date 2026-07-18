@@ -24,9 +24,10 @@ Layering mirrors the template's split (pure `.ts` vs. runes `.svelte.ts`):
 
 - **`src/lib/game/*.ts`** — pure, framework-free, Node-tested engine (each has a `*.spec.ts`):
   `types.ts` (shared types), `normalize.ts` (Unicode-aware word cleanup, keeps äöüß),
-  `rules.ts` (`validateTurn` — start letter / min length / duplicate, with `locker/standard/streng`
-  strictness), `score.ts` (`scoreTurn` — base + length + end-letter rarity + tempo + combo),
-  `letterValues.ts` (per-language rarity model, de/en), `config.ts` (tunables).
+  `rules.ts` (`validateTurn` — start letter / min length / duplicate; start-letter matching is always
+  lenient — case-insensitive with umlauts/ß folded), `score.ts` (`scoreTurn` — base + length +
+  end-letter rarity + tempo + combo), `playerColors.ts` (auto-assigned, editable per-player accent
+  colours), `letterValues.ts` (per-language rarity model, de/en), `config.ts` (tunables).
 - **`src/lib/i18n/messages.ts`** — pure de/en UI string catalogues + `speechLocale()` (BCP-47).
 - **`src/lib/state/*.svelte.ts`** — runes singletons: `settings` (language, browser-default +
   localStorage), `gameSession` (the Session Engine: phase machine, turn timer, `submitWord` funnel for

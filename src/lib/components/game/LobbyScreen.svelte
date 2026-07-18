@@ -1,16 +1,28 @@
 <script lang="ts">
 	import { settings } from '$lib/state/settings.svelte.js';
 	import { gameSession } from '$lib/state/game.svelte.js';
-	import { strictnessMessageKey } from '$lib/i18n/messages.js';
-	import type { Strictness } from '$lib/game/types.js';
 	import LanguageToggle from './LanguageToggle.svelte';
 
 	let newName = $state('');
-	const strictnessOptions: Strictness[] = ['locker', 'standard', 'streng'];
+
+	// The engine treats `turnSeconds === 0` as "no timer". The checkbox flips between 0 and
+	// the last non-zero value so unchecking then re-checking restores the player's number.
+	let timeLimitOn = $state(gameSession.config.turnSeconds > 0);
+	let lastSeconds = $state(gameSession.config.turnSeconds > 0 ? gameSession.config.turnSeconds : 30);
 
 	function addPlayer() {
 		gameSession.addPlayer(newName);
 		newName = '';
+	}
+
+	function toggleTimeLimit(on: boolean) {
+		timeLimitOn = on;
+		if (on) {
+			gameSession.config.turnSeconds = lastSeconds;
+		} else {
+			lastSeconds = gameSession.config.turnSeconds || lastSeconds;
+			gameSession.config.turnSeconds = 0;
+		}
 	}
 </script>
 
@@ -42,9 +54,23 @@
 		<ul class="flex flex-col gap-2">
 			{#each gameSession.players as player (player.id)}
 				<li
-					class="flex items-center justify-between rounded-control border border-line bg-surface px-3 py-2"
+					class="flex items-center gap-3 rounded-control border border-line bg-surface px-3 py-2"
+					style="border-left: 4px solid {player.color}"
 				>
-					<span class="text-body text-slate-100">{player.name}</span>
+					<label
+						class="relative size-6 shrink-0 cursor-pointer overflow-hidden rounded-full ring-1 ring-line-strong"
+						style="background-color: {player.color}"
+						title={settings.t('playerColor')}
+					>
+						<input
+							type="color"
+							value={player.color}
+							onchange={(e) => gameSession.setPlayerColor(player.id, e.currentTarget.value)}
+							aria-label={settings.t('playerColor')}
+							class="absolute inset-0 size-full cursor-pointer opacity-0"
+						/>
+					</label>
+					<span class="flex-1 text-body text-slate-100">{player.name}</span>
 					<button
 						type="button"
 						onclick={() => gameSession.removePlayer(player.id)}
@@ -61,46 +87,40 @@
 	<section class="flex flex-col gap-4">
 		<h2 class="text-h2 font-semibold text-slate-200">{settings.t('settings')}</h2>
 
-		<div class="flex flex-col gap-1.5">
-			<span class="text-label text-slate-400">{settings.t('strictness')}</span>
-			<div class="inline-flex rounded-control border border-line">
-				{#each strictnessOptions as option (option)}
-					<button
-						type="button"
-						onclick={() => (gameSession.config.strictness = option)}
-						aria-pressed={gameSession.config.strictness === option}
-						class="px-3 py-1.5 text-label font-medium first:rounded-l-control last:rounded-r-control
-							{gameSession.config.strictness === option
-							? 'bg-accent-strong text-white'
-							: 'text-slate-300 hover:bg-surface-raised'}"
-					>
-						{settings.t(strictnessMessageKey[option])}
-					</button>
-				{/each}
-			</div>
-		</div>
+		<div class="flex flex-col gap-2">
+			<label class="flex items-center gap-2.5">
+				<input
+					type="checkbox"
+					checked={timeLimitOn}
+					onchange={(e) => toggleTimeLimit(e.currentTarget.checked)}
+					class="size-4 rounded border-line bg-surface text-accent-strong focus:ring-accent"
+				/>
+				<span class="text-label text-slate-300">{settings.t('timeLimit')}</span>
+			</label>
 
-		<div class="grid grid-cols-2 gap-4">
-			<label class="flex flex-col gap-1.5">
-				<span class="text-label text-slate-400">{settings.t('turnSeconds')}</span>
-				<input
-					type="number"
-					min="5"
-					max="120"
-					bind:value={gameSession.config.turnSeconds}
-					class="rounded-control border border-line bg-surface px-3 py-2 text-body text-slate-100"
-				/>
-			</label>
-			<label class="flex flex-col gap-1.5">
-				<span class="text-label text-slate-400">{settings.t('minLength')}</span>
-				<input
-					type="number"
-					min="1"
-					max="10"
-					bind:value={gameSession.config.minLength}
-					class="rounded-control border border-line bg-surface px-3 py-2 text-body text-slate-100"
-				/>
-			</label>
+			<div class="grid grid-cols-2 gap-4">
+				<label class="flex flex-col gap-1.5">
+					<span class="text-label text-slate-400">{settings.t('turnSeconds')}</span>
+					<input
+						type="number"
+						min="5"
+						max="120"
+						disabled={!timeLimitOn}
+						bind:value={gameSession.config.turnSeconds}
+						class="rounded-control border border-line bg-surface px-3 py-2 text-body text-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
+					/>
+				</label>
+				<label class="flex flex-col gap-1.5">
+					<span class="text-label text-slate-400">{settings.t('minLength')}</span>
+					<input
+						type="number"
+						min="1"
+						max="10"
+						bind:value={gameSession.config.minLength}
+						class="rounded-control border border-line bg-surface px-3 py-2 text-body text-slate-100"
+					/>
+				</label>
+			</div>
 		</div>
 
 		<label class="flex flex-col gap-1.5">

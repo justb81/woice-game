@@ -8,14 +8,19 @@
 		<li
 			class="flex items-center gap-2 rounded-control border px-3 py-1.5
 				{i === gameSession.currentIndex
-				? 'border-accent bg-accent-strong/20 text-slate-50'
+				? 'bg-surface-raised text-slate-50'
 				: 'border-line bg-surface text-slate-300'}"
+			style={i === gameSession.currentIndex
+				? `border-color: ${player.color}; box-shadow: 0 0 0 1px ${player.color}`
+				: ''}
 		>
-			{#if i === gameSession.currentIndex}
-				<span class="size-2 rounded-full bg-accent-soft" aria-hidden="true"></span>
-			{/if}
+			<span
+				class="size-2.5 rounded-full {i === gameSession.currentIndex ? 'animate-pulse' : ''}"
+				style="background-color: {player.color}"
+				aria-hidden="true"
+			></span>
 			<span class="text-label font-medium">{player.name}</span>
-			<span class="text-label font-bold text-accent-soft tabular-nums">
+			<span class="text-label font-bold tabular-nums" style="color: {player.color}">
 				{player.score}<span class="ml-0.5 text-caption font-normal text-slate-500"
 					>{settings.t('points')}</span
 				>
