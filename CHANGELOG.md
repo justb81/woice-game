@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.0](https://github.com/justb81/woice-game/compare/woice-v0.3.0...woice-v1.0.0) (2026-07-18)
+
+
+### Features
+
+* **game:** add persistent stats screen and roster persistence ([#36](https://github.com/justb81/woice-game/issues/36)) ([bd9b309](https://github.com/justb81/woice-game/commit/bd9b309016457df9f29268284f7a439c538ee3a5))
+* **game:** voice-first UI, lenient-only rules, per-player colours, optional timer, install prompt ([#33](https://github.com/justb81/woice-game/issues/33)) ([fe3843d](https://github.com/justb81/woice-game/commit/fe3843d973ca5e974be5a86a5c6dc0dea3b8d23b))
+* redesign Woice brand icon and adopt violet accent ([#35](https://github.com/justb81/woice-game/issues/35)) ([b45568d](https://github.com/justb81/woice-game/commit/b45568daed6116a4fd15423beace0265e992fca6))
+
+
+### Miscellaneous Chores
+
+* release 1.0.0 ([#37](https://github.com/justb81/woice-game/issues/37)) ([030dfc2](https://github.com/justb81/woice-game/commit/030dfc255f92fce672b42251033e6162e743eaa5))
+
 ## [0.3.0](https://github.com/justb81/woice-game/compare/woice-v0.2.0...woice-v0.3.0) (2026-07-18)
 
 
