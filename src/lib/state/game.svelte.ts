@@ -8,7 +8,7 @@
 
 import { browser } from '$app/environment';
 import type { GameConfig, Phase, Player, Turn, ValidationResult } from '$lib/game/types.js';
-import { DEFAULT_CONFIG, MAX_HISTORY } from '$lib/game/config.js';
+import { DEFAULT_CONFIG, LONGEST_WORD_BONUS_PER_LETTER, MAX_HISTORY } from '$lib/game/config.js';
 import { validateTurn } from '$lib/game/rules.js';
 import { scoreTurn, errorPenalty } from '$lib/game/score.js';
 import { assignPlayerColor } from '$lib/game/playerColors.js';
@@ -53,6 +53,8 @@ class GameSession {
 	currentIndex = $state(0);
 	requiredStart = $state('');
 	secondsLeft = $state(0);
+	/** Seconds left in the whole round; only counts down when `config.roundSeconds > 0`. */
+	roundSecondsLeft = $state(0);
 	/** Latest validation outcome — drives the on-screen feedback overlay. Cleared after OVERLAY_MS. */
 	lastResult = $state<ValidationResult | null>(null);
 
@@ -60,6 +62,7 @@ class GameSession {
 	#nextTurnId = 1;
 	#turnStart = 0;
 	#timer: ReturnType<typeof setInterval> | undefined;
+	#roundTimer: ReturnType<typeof setInterval> | undefined;
 	#overlayTimer: ReturnType<typeof setTimeout> | undefined;
 
 	constructor() {
@@ -94,12 +97,23 @@ class GameSession {
 		return this.players.filter((p) => p.score === top).length === 1;
 	}
 
-	/** Longest valid word played this round, or '' if none. */
-	get longestWord(): string {
+	/** The valid turn with the longest word this round (earliest wins ties), or undefined if none. */
+	get longestWordTurn(): Turn | undefined {
 		return this.turns
 			.filter((t) => t.valid)
-			.map((t) => t.normalizedWord)
-			.reduce((longest, w) => (w.length > longest.length ? w : longest), '');
+			.reduce<Turn | undefined>(
+				(longest, t) =>
+					longest === undefined ||
+					[...t.normalizedWord].length > [...longest.normalizedWord].length
+						? t
+						: longest,
+				undefined
+			);
+	}
+
+	/** Longest valid word played this round, or '' if none. */
+	get longestWord(): string {
+		return this.longestWordTurn?.normalizedWord ?? '';
 	}
 
 	/** Normalised valid words already played — the duplicate check reads this. */
@@ -158,6 +172,7 @@ class GameSession {
 		this.requiredStart = this.config.startLetter || this.#randomStartLetter();
 		this.lastResult = null;
 		this.phase = 'ingame';
+		this.#startRoundTimer();
 		this.#startTurnTimer();
 	}
 
@@ -186,7 +201,7 @@ class GameSession {
 				endLetter: result.endLetter,
 				durationMs,
 				config: this.config,
-				comboCount: this.#currentCombo(player.id)
+				endLetterUses: this.#endLetterUses(result.endLetter)
 			});
 			player.score += breakdown.total;
 			this.turns.push({
@@ -226,11 +241,13 @@ class GameSession {
 
 	reset(): void {
 		this.#clearTimer();
+		this.#clearRoundTimer();
 		this.#clearOverlay();
 		this.phase = 'lobby';
 		this.turns = [];
 		this.lastResult = null;
 		this.secondsLeft = 0;
+		this.roundSecondsLeft = 0;
 		for (const p of this.players) {
 			p.score = 0;
 			p.errors = 0;
@@ -239,22 +256,16 @@ class GameSession {
 
 	backHome(): void {
 		this.#clearTimer();
+		this.#clearRoundTimer();
 		this.#clearOverlay();
 		this.phase = 'home';
 	}
 
 	// --- Internals -----------------------------------------------------------
 
-	/** Consecutive valid turns most recently made by this player (before the current one). */
-	#currentCombo(playerId: string): number {
-		let combo = 0;
-		for (let i = this.turns.length - 1; i >= 0; i--) {
-			const t = this.turns[i];
-			if (t.playerId !== playerId) continue;
-			if (t.valid) combo++;
-			else break;
-		}
-		return combo;
+	/** How many earlier valid turns this round already ended with `endLetter` — drives the repetition malus. */
+	#endLetterUses(endLetter: string): number {
+		return this.turns.filter((t) => t.valid && t.endLetter === endLetter).length;
 	}
 
 	#randomStartLetter(): string {
@@ -267,19 +278,35 @@ class GameSession {
 		this.#startTurnTimer();
 	}
 
-	/** True (and transitions to summary) when a target score or error limit is hit. */
+	/** True (and ends the round) when a player has reached the target score. */
 	#checkEndConditions(): boolean {
-		const done = this.players.some(
-			(p) => p.score >= this.config.targetScore || p.errors >= this.config.errorLimit
-		);
-		if (done) {
-			this.#clearTimer();
-			this.phase = 'summary';
-			// Fold the finished round into long-term stats. Reached exactly once per round
-			// (submitWord early-returns once phase !== 'ingame'), with scores still intact.
-			stats.recordRound({ players: this.players, turns: this.turns });
-		}
+		const done = this.players.some((p) => p.score >= this.config.targetScore);
+		if (done) this.#endRound();
 		return done;
+	}
+
+	/**
+	 * End the round: stop the timers, award the longest-word bonus, and fold the finished round
+	 * into long-term stats. Guarded so it runs exactly once per round even if a target-score hit
+	 * and the round timer race.
+	 */
+	#endRound(): void {
+		if (this.phase !== 'ingame') return;
+		this.#clearTimer();
+		this.#clearRoundTimer();
+		// Award the bonus *before* recording stats so it counts toward the winner and totals.
+		this.#awardLongestWordBonus();
+		this.phase = 'summary';
+		stats.recordRound({ players: this.players, turns: this.turns });
+	}
+
+	/** Give the player of the round's longest word 1 point per letter, once, at round end. */
+	#awardLongestWordBonus(): void {
+		const turn = this.longestWordTurn;
+		if (!turn) return;
+		const player = this.players.find((p) => p.id === turn.playerId);
+		if (!player) return;
+		player.score += [...turn.normalizedWord].length * LONGEST_WORD_BONUS_PER_LETTER;
 	}
 
 	/** Persist just the roster identity (names + colours) so a returning group keeps its line-up. */
@@ -312,6 +339,28 @@ class GameSession {
 		if (this.#timer !== undefined) {
 			clearInterval(this.#timer);
 			this.#timer = undefined;
+		}
+	}
+
+	/** Start the round-level countdown. Runs continuously from `startGame` (not reset per turn). */
+	#startRoundTimer(): void {
+		this.roundSecondsLeft = this.config.roundSeconds;
+		if (!browser) return;
+		this.#clearRoundTimer();
+		if (this.config.roundSeconds <= 0) return; // round timer disabled
+		this.#roundTimer = setInterval(() => {
+			this.roundSecondsLeft -= 1;
+			if (this.roundSecondsLeft <= 0) {
+				// Time's up: end the round on the highest score so far.
+				this.#endRound();
+			}
+		}, 1000);
+	}
+
+	#clearRoundTimer(): void {
+		if (this.#roundTimer !== undefined) {
+			clearInterval(this.#roundTimer);
+			this.#roundTimer = undefined;
 		}
 	}
 

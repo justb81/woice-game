@@ -14,7 +14,7 @@ export interface Player {
 	id: string;
 	name: string;
 	score: number;
-	/** Invalid turns this player has made; the round ends when someone hits `errorLimit`. */
+	/** Invalid turns this player has made — tracked for stats only; no longer ends the round. */
 	errors: number;
 	/** Player accent colour (hex). Auto-assigned on join, editable in the lobby. */
 	color: string;
@@ -26,10 +26,10 @@ export interface GameConfig {
 	minLength: number;
 	/** Length of a player's turn window in seconds. `0` disables the per-turn timer. */
 	turnSeconds: number;
+	/** Length of the whole round in seconds. `0` disables the round timer. */
+	roundSeconds: number;
 	/** Round ends once any player reaches this score. */
 	targetScore: number;
-	/** Round ends once any player accumulates this many invalid turns. */
-	errorLimit: number;
 	/** Normalised letter the very first turn must start with. */
 	startLetter: string;
 }
@@ -49,11 +49,9 @@ export interface ValidationResult {
 /** Itemised points for a single valid turn; `total` is the sum of every field. */
 export interface ScoreBreakdown {
 	base: number;
-	lengthBonus: number;
 	rarityBonus: number;
 	tempoBonus: number;
-	comboBonus: number;
-	/** Repetition/error penalty. Zero or negative. */
+	/** Repetition malus for frequently-used end letters (and any other deductions). Zero or negative. */
 	penalty: number;
 	total: number;
 }

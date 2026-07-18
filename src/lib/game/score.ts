@@ -1,18 +1,11 @@
 /**
  * The Score Engine: turns a valid move into an itemised point breakdown.
  * Every component is transparent (see ScoreBreakdown) so the UI can show *why*
- * a word scored what it did — base + length + end-letter rarity + tempo + combo.
+ * a word scored what it did — base + end-letter rarity + tempo − repetition malus.
  */
 
 import type { GameConfig, ScoreBreakdown } from './types.js';
-import {
-	BASE_POINTS,
-	COMBO_CAP,
-	COMBO_STEP,
-	ERROR_PENALTY,
-	LENGTH_BONUS_PER_LETTER,
-	MAX_TEMPO_BONUS
-} from './config.js';
+import { BASE_POINTS, ERROR_PENALTY, MAX_TEMPO_BONUS, REPETITION_PENALTY_PER_USE } from './config.js';
 import { letterValue } from './letterValues.js';
 
 export interface ScoreTurnInput {
@@ -22,22 +15,18 @@ export interface ScoreTurnInput {
 	/** How long the player took, in ms. Faster answers earn a larger tempo bonus. */
 	durationMs: number;
 	config: GameConfig;
-	/** Consecutive valid turns by this player, before this one. */
-	comboCount: number;
+	/** How many earlier valid turns this round already ended with this same letter (before this one). */
+	endLetterUses: number;
 }
 
 /** Score a valid turn. The returned `total` always equals the sum of the other fields. */
 export function scoreTurn({
-	normalizedWord,
 	endLetter,
 	durationMs,
 	config,
-	comboCount
+	endLetterUses
 }: ScoreTurnInput): ScoreBreakdown {
-	const length = [...normalizedWord].length;
-
 	const base = BASE_POINTS;
-	const lengthBonus = Math.max(0, length - config.minLength) * LENGTH_BONUS_PER_LETTER;
 	const rarityBonus = letterValue(endLetter, config.language);
 
 	// Fraction of the turn window still remaining, clamped to [0, 1]. A 0-second
@@ -46,12 +35,13 @@ export function scoreTurn({
 	const remaining = windowMs > 0 ? Math.max(0, 1 - durationMs / windowMs) : 0;
 	const tempoBonus = Math.round(remaining * MAX_TEMPO_BONUS);
 
-	const comboBonus = Math.min(comboCount, COMBO_CAP) * COMBO_STEP;
+	// Repetition malus: every earlier use of this end letter this round makes it worth less,
+	// eventually pushing the turn's net value negative — the point is to discourage re-using letters.
+	const uses = Math.max(0, endLetterUses);
+	const penalty = uses > 0 ? -(uses * REPETITION_PENALTY_PER_USE) : 0;
+	const total = base + rarityBonus + tempoBonus + penalty;
 
-	const penalty = 0;
-	const total = base + lengthBonus + rarityBonus + tempoBonus + comboBonus + penalty;
-
-	return { base, lengthBonus, rarityBonus, tempoBonus, comboBonus, penalty, total };
+	return { base, rarityBonus, tempoBonus, penalty, total };
 }
 
 /** Negative score delta applied when a player's turn is invalid. */

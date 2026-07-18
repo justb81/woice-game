@@ -32,10 +32,8 @@ function validTurn(playerId: string, word: string): Turn {
 		durationMs: 1000,
 		breakdown: {
 			base: 5,
-			lengthBonus: 0,
 			rarityBonus: 1,
 			tempoBonus: 0,
-			comboBonus: 0,
 			penalty: 0,
 			total: 6
 		}

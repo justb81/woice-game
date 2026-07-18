@@ -3,6 +3,7 @@
 	import { gameSession } from '$lib/state/game.svelte.js';
 	import NextLetterDisplay from './NextLetterDisplay.svelte';
 	import Scoreboard from './Scoreboard.svelte';
+	import RoundTimer from './RoundTimer.svelte';
 	import TurnTimer from './TurnTimer.svelte';
 	import WordHistory from './WordHistory.svelte';
 	import WordInput from './WordInput.svelte';
@@ -12,6 +13,8 @@
 <ValidationOverlay />
 
 <main class="mx-auto flex max-w-xl flex-col gap-6 px-5 py-8">
+	<RoundTimer />
+
 	<Scoreboard />
 
 	<div class="flex flex-col items-center gap-3">

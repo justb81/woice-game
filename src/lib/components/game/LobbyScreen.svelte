@@ -21,6 +21,12 @@
 		gameSession.config.turnSeconds > 0 ? gameSession.config.turnSeconds : 30
 	);
 
+	// Same pattern for the round-level timer (`roundSeconds === 0` means "no round timer").
+	let roundLimitOn = $state(gameSession.config.roundSeconds > 0);
+	let lastRoundSeconds = $state(
+		gameSession.config.roundSeconds > 0 ? gameSession.config.roundSeconds : 180
+	);
+
 	function addPlayer() {
 		gameSession.addPlayer(newName);
 		newName = '';
@@ -33,6 +39,16 @@
 		} else {
 			lastSeconds = gameSession.config.turnSeconds || lastSeconds;
 			gameSession.config.turnSeconds = 0;
+		}
+	}
+
+	function toggleRoundLimit(on: boolean) {
+		roundLimitOn = on;
+		if (on) {
+			gameSession.config.roundSeconds = lastRoundSeconds;
+		} else {
+			lastRoundSeconds = gameSession.config.roundSeconds || lastRoundSeconds;
+			gameSession.config.roundSeconds = 0;
 		}
 	}
 </script>
@@ -128,6 +144,43 @@
 						min="1"
 						max="10"
 						bind:value={gameSession.config.minLength}
+						class="rounded-control border border-line bg-surface px-3 py-2 text-body text-slate-100"
+					/>
+				</label>
+			</div>
+		</div>
+
+		<div class="flex flex-col gap-2">
+			<label class="flex items-center gap-2.5">
+				<input
+					type="checkbox"
+					checked={roundLimitOn}
+					onchange={(e) => toggleRoundLimit(e.currentTarget.checked)}
+					class="size-4 rounded border-line bg-surface text-accent-strong focus:ring-accent"
+				/>
+				<span class="text-label text-slate-300">{settings.t('roundTimeLimit')}</span>
+			</label>
+
+			<div class="grid grid-cols-2 gap-4">
+				<label class="flex flex-col gap-1.5">
+					<span class="text-label text-slate-400">{settings.t('roundSeconds')}</span>
+					<input
+						type="number"
+						min="10"
+						max="1800"
+						disabled={!roundLimitOn}
+						bind:value={gameSession.config.roundSeconds}
+						class="rounded-control border border-line bg-surface px-3 py-2 text-body text-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
+					/>
+				</label>
+				<label class="flex flex-col gap-1.5">
+					<span class="text-label text-slate-400">{settings.t('targetScore')}</span>
+					<input
+						type="number"
+						min="10"
+						max="1000"
+						step="10"
+						bind:value={gameSession.config.targetScore}
 						class="rounded-control border border-line bg-surface px-3 py-2 text-body text-slate-100"
 					/>
 				</label>
