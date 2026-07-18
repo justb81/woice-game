@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/justb81/woice-game/compare/woice-v1.0.0...woice-v1.1.0) (2026-07-18)
+
+
+### Features
+
+* **game:** rework scoring rules and add configurable round length ([#38](https://github.com/justb81/woice-game/issues/38)) ([4e9ced4](https://github.com/justb81/woice-game/commit/4e9ced4729dae022d2653e57c99c22a11ee12d3b))
+
 ## [1.0.0](https://github.com/justb81/woice-game/compare/woice-v0.3.0...woice-v1.0.0) (2026-07-18)
 
 
