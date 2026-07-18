@@ -103,8 +103,7 @@ class GameSession {
 			.filter((t) => t.valid)
 			.reduce<Turn | undefined>(
 				(longest, t) =>
-					longest === undefined ||
-					[...t.normalizedWord].length > [...longest.normalizedWord].length
+					longest === undefined || [...t.normalizedWord].length > [...longest.normalizedWord].length
 						? t
 						: longest,
 				undefined

@@ -5,7 +5,12 @@
  */
 
 import type { GameConfig, ScoreBreakdown } from './types.js';
-import { BASE_POINTS, ERROR_PENALTY, MAX_TEMPO_BONUS, REPETITION_PENALTY_PER_USE } from './config.js';
+import {
+	BASE_POINTS,
+	ERROR_PENALTY,
+	MAX_TEMPO_BONUS,
+	REPETITION_PENALTY_PER_USE
+} from './config.js';
 import { letterValue } from './letterValues.js';
 
 export interface ScoreTurnInput {
