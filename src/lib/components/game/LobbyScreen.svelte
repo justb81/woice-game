@@ -8,7 +8,9 @@
 	// The engine treats `turnSeconds === 0` as "no timer". The checkbox flips between 0 and
 	// the last non-zero value so unchecking then re-checking restores the player's number.
 	let timeLimitOn = $state(gameSession.config.turnSeconds > 0);
-	let lastSeconds = $state(gameSession.config.turnSeconds > 0 ? gameSession.config.turnSeconds : 30);
+	let lastSeconds = $state(
+		gameSession.config.turnSeconds > 0 ? gameSession.config.turnSeconds : 30
+	);
 
 	function addPlayer() {
 		gameSession.addPlayer(newName);

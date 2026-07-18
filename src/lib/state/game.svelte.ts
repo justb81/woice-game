@@ -82,7 +82,13 @@ class GameSession {
 		const trimmed = name.trim();
 		if (trimmed === '') return;
 		const color = assignPlayerColor(this.players.map((p) => p.color));
-		this.players.push({ id: `p${this.#nextPlayerId++}`, name: trimmed, score: 0, errors: 0, color });
+		this.players.push({
+			id: `p${this.#nextPlayerId++}`,
+			name: trimmed,
+			score: 0,
+			errors: 0,
+			color
+		});
 	}
 
 	removePlayer(id: string): void {
