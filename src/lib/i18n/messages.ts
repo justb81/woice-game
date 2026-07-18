@@ -21,6 +21,9 @@ export type MessageKey =
 	| 'settings'
 	| 'timeLimit'
 	| 'turnSeconds'
+	| 'roundTimeLimit'
+	| 'roundSeconds'
+	| 'targetScore'
 	| 'minLength'
 	| 'startLetter'
 	| 'startLetterRandom'
@@ -44,6 +47,7 @@ export type MessageKey =
 	| 'winner'
 	| 'tie'
 	| 'longestWord'
+	| 'longestWordBonus'
 	| 'playAgain'
 	| 'backHome'
 	| 'points'
@@ -83,6 +87,9 @@ export const messages: Record<Language, Messages> = {
 		settings: 'Einstellungen',
 		timeLimit: 'Zeitlimit pro Zug',
 		turnSeconds: 'Zeit pro Zug (Sek.)',
+		roundTimeLimit: 'Zeitlimit pro Runde',
+		roundSeconds: 'Zeit pro Runde (Sek.)',
+		targetScore: 'Zielpunktzahl',
 		minLength: 'Mindestlänge',
 		startLetter: 'Startbuchstabe',
 		startLetterRandom: 'Zufällig',
@@ -106,6 +113,7 @@ export const messages: Record<Language, Messages> = {
 		winner: 'Sieger',
 		tie: 'Unentschieden',
 		longestWord: 'Längstes Wort',
+		longestWordBonus: 'Längstes-Wort-Bonus',
 		playAgain: 'Nochmal',
 		backHome: 'Zum Start',
 		points: 'Pkt.',
@@ -142,6 +150,9 @@ export const messages: Record<Language, Messages> = {
 		settings: 'Settings',
 		timeLimit: 'Time limit per turn',
 		turnSeconds: 'Time per turn (sec)',
+		roundTimeLimit: 'Time limit per round',
+		roundSeconds: 'Time per round (sec)',
+		targetScore: 'Target score',
 		minLength: 'Minimum length',
 		startLetter: 'Start letter',
 		startLetterRandom: 'Random',
@@ -165,6 +176,7 @@ export const messages: Record<Language, Messages> = {
 		winner: 'Winner',
 		tie: 'Tie',
 		longestWord: 'Longest word',
+		longestWordBonus: 'Longest-word bonus',
 		playAgain: 'Play again',
 		backHome: 'Home',
 		points: 'pts',
