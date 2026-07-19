@@ -24,8 +24,12 @@
 							>{player(turn.playerId)?.name ?? ''}</span
 						>
 					</span>
-					<span class="text-label font-bold text-success tabular-nums">
-						+{turn.breakdown?.total ?? 0}
+					<span
+						class="text-label font-bold tabular-nums {(turn.breakdown?.total ?? 0) < 0
+							? 'text-danger'
+							: 'text-success'}"
+					>
+						{(turn.breakdown?.total ?? 0) >= 0 ? '+' : ''}{turn.breakdown?.total ?? 0}
 					</span>
 				</li>
 			{/each}

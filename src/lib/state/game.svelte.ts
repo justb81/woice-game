@@ -10,7 +10,7 @@ import { browser } from '$app/environment';
 import type { GameConfig, Phase, Player, Turn, ValidationResult } from '$lib/game/types.js';
 import { DEFAULT_CONFIG, LONGEST_WORD_BONUS_PER_LETTER, MAX_HISTORY } from '$lib/game/config.js';
 import { validateTurn } from '$lib/game/rules.js';
-import { scoreTurn, errorPenalty } from '$lib/game/score.js';
+import { scoreTurn, errorPenalty, projectedEndLetterScore } from '$lib/game/score.js';
 import { assignPlayerColor } from '$lib/game/playerColors.js';
 import { stats } from './stats.svelte.js';
 
@@ -118,6 +118,23 @@ class GameSession {
 	/** Normalised valid words already played — the duplicate check reads this. */
 	get usedWords(): Set<string> {
 		return new Set(this.turns.filter((t) => t.valid).map((t) => t.normalizedWord));
+	}
+
+	/**
+	 * End letters that have been repeated enough this round that a new word ending in one would now
+	 * score net-negative (worst-first). Empty when the repetition-penalty rule is off — the in-game
+	 * "these letters cost points" hint reads this.
+	 */
+	get negativeEndLetters(): { letter: string; projected: number }[] {
+		if (!this.config.repetitionPenalty) return [];
+		const letters = new Set(this.turns.filter((t) => t.valid).map((t) => t.endLetter));
+		return [...letters]
+			.map((letter) => ({
+				letter,
+				projected: projectedEndLetterScore(letter, this.#endLetterUses(letter), this.config)
+			}))
+			.filter((e) => e.projected < 0)
+			.sort((a, b) => a.projected - b.projected);
 	}
 
 	// --- Lobby ---------------------------------------------------------------
@@ -238,6 +255,11 @@ class GameSession {
 		this.#advanceTurn();
 	}
 
+	/** End the current round on demand (the in-game "End round" button). No-op outside a live round. */
+	endRound(): void {
+		this.#endRound();
+	}
+
 	reset(): void {
 		this.#clearTimer();
 		this.#clearRoundTimer();
@@ -301,6 +323,7 @@ class GameSession {
 
 	/** Give the player of the round's longest word 1 point per letter, once, at round end. */
 	#awardLongestWordBonus(): void {
+		if (!this.config.longestWordBonus) return;
 		const turn = this.longestWordTurn;
 		if (!turn) return;
 		const player = this.players.find((p) => p.id === turn.playerId);

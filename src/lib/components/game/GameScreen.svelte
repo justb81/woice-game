@@ -2,6 +2,7 @@
 	import { settings } from '$lib/state/settings.svelte.js';
 	import { gameSession } from '$lib/state/game.svelte.js';
 	import NextLetterDisplay from './NextLetterDisplay.svelte';
+	import EndLetterPenalties from './EndLetterPenalties.svelte';
 	import Scoreboard from './Scoreboard.svelte';
 	import RoundTimer from './RoundTimer.svelte';
 	import TurnTimer from './TurnTimer.svelte';
@@ -27,9 +28,19 @@
 		{/if}
 	</div>
 
+	<EndLetterPenalties />
+
 	<TurnTimer />
 
 	<WordInput />
 
 	<WordHistory />
+
+	<button
+		type="button"
+		onclick={() => gameSession.endRound()}
+		class="mx-auto rounded-control border border-line px-4 py-2 text-label font-medium text-slate-300 transition hover:bg-surface-raised"
+	>
+		{settings.t('endRound')}
+	</button>
 </main>
