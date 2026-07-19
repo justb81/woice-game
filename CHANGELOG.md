@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/justb81/woice-game/compare/woice-v1.1.0...woice-v1.2.0) (2026-07-19)
+
+
+### Features
+
+* **game:** end-round button, capped minus points, penalty-letter hint, scoring-rule toggles ([#41](https://github.com/justb81/woice-game/issues/41)) ([5995c7b](https://github.com/justb81/woice-game/commit/5995c7baae4f39ce6da35e39fec47684d22926dd))
+
 ## [1.1.0](https://github.com/justb81/woice-game/compare/woice-v1.0.0...woice-v1.1.0) (2026-07-18)
 
 
