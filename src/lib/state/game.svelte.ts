@@ -12,6 +12,7 @@ import { DEFAULT_CONFIG, LONGEST_WORD_BONUS_PER_LETTER, MAX_HISTORY } from '$lib
 import { validateTurn } from '$lib/game/rules.js';
 import { scoreTurn, errorPenalty, projectedEndLetterScore } from '$lib/game/score.js';
 import { assignPlayerColor } from '$lib/game/playerColors.js';
+import { settings } from './settings.svelte.js';
 import { stats } from './stats.svelte.js';
 
 /** How long the validation overlay stays on screen after a turn. */
@@ -68,6 +69,9 @@ class GameSession {
 	constructor() {
 		// Keep new ids clear of any restored from the persisted roster.
 		this.#nextPlayerId = this.players.length + 1;
+		// Default the game (spoken/scoring) language to the UI language; the lobby lets the
+		// group override it independently so the round can be played in another language.
+		this.config.language = settings.language;
 	}
 
 	get currentPlayer(): Player | undefined {

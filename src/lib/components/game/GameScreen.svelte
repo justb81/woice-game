@@ -9,11 +9,24 @@
 	import WordHistory from './WordHistory.svelte';
 	import WordInput from './WordInput.svelte';
 	import ValidationOverlay from './ValidationOverlay.svelte';
+	import LanguageToggle from './LanguageToggle.svelte';
 </script>
 
 <ValidationOverlay />
 
 <main class="mx-auto flex max-w-xl flex-col gap-6 px-5 py-8">
+	<!-- Top controls stay reachable without scrolling past the word history below. -->
+	<div class="flex items-center justify-between gap-3">
+		<button
+			type="button"
+			onclick={() => gameSession.endRound()}
+			class="rounded-control border border-line px-4 py-2 text-label font-medium text-slate-300 transition hover:bg-surface-raised"
+		>
+			{settings.t('endRound')}
+		</button>
+		<LanguageToggle />
+	</div>
+
 	<RoundTimer />
 
 	<Scoreboard />
@@ -35,12 +48,4 @@
 	<WordInput />
 
 	<WordHistory />
-
-	<button
-		type="button"
-		onclick={() => gameSession.endRound()}
-		class="mx-auto rounded-control border border-line px-4 py-2 text-label font-medium text-slate-300 transition hover:bg-surface-raised"
-	>
-		{settings.t('endRound')}
-	</button>
 </main>

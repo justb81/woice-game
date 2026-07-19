@@ -2,11 +2,12 @@
  * Voice-input adapter over the Web Speech API. Feature-detected and browser-guarded
  * (same pattern as `windowChrome.svelte.ts`): if the API is missing — Firefox, SSR,
  * prerender — `supported` stays false and the UI silently falls back to text input.
- * Recognition language follows the app's selected language.
+ * Recognition language follows the round's game language (`config.language`), which the
+ * lobby lets the group set independently of the UI language.
  */
 
 import { browser } from '$app/environment';
-import { settings } from './settings.svelte.js';
+import { gameSession } from './game.svelte.js';
 import { speechLocale } from '$lib/i18n/messages.js';
 
 class SpeechInput {
@@ -32,7 +33,7 @@ class SpeechInput {
 		if (!this.#Ctor || this.listening) return;
 
 		const recognition = new this.#Ctor();
-		recognition.lang = speechLocale(settings.language);
+		recognition.lang = speechLocale(gameSession.config.language);
 		recognition.interimResults = true;
 		recognition.continuous = false;
 		recognition.maxAlternatives = 1;
