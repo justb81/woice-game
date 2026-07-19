@@ -2,6 +2,7 @@
 	import { settings } from '$lib/state/settings.svelte.js';
 	import { gameSession } from '$lib/state/game.svelte.js';
 	import { LONGEST_WORD_BONUS_PER_LETTER } from '$lib/game/config.js';
+	import LanguageToggle from './LanguageToggle.svelte';
 
 	// Players ranked by score, highest first.
 	const ranked = $derived([...gameSession.players].sort((a, b) => b.score - a.score));
@@ -29,7 +30,11 @@
 	});
 </script>
 
-<main class="mx-auto flex max-w-lg flex-col gap-8 px-5 py-12 text-center">
+<main class="relative mx-auto flex max-w-lg flex-col gap-8 px-5 py-12 text-center">
+	<div class="absolute top-5 right-5 text-left">
+		<LanguageToggle />
+	</div>
+
 	<h1 class="text-display font-bold text-slate-50">{settings.t('summaryTitle')}</h1>
 
 	<div class="flex flex-col gap-1">

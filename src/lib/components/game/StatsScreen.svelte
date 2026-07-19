@@ -3,15 +3,28 @@
 	import { gameSession } from '$lib/state/game.svelte.js';
 	import { stats } from '$lib/state/stats.svelte.js';
 	import { topWinners, globalFavoriteLetters, bestComboOverall } from '$lib/game/stats.js';
+	import LanguageToggle from './LanguageToggle.svelte';
 
 	const data = $derived(stats.data);
 	const ranked = $derived(topWinners(data));
 	const favorites = $derived(globalFavoriteLetters(data));
 	const bestCombo = $derived(bestComboOverall(data));
 	const hasData = $derived(data.roundsPlayed > 0);
+
+	// Two-step confirm for the destructive stats reset (no modal lib — inline reveal).
+	let confirmReset = $state(false);
+
+	function resetStats() {
+		stats.reset();
+		confirmReset = false;
+	}
 </script>
 
-<main class="mx-auto flex max-w-lg flex-col gap-8 px-5 py-12">
+<main class="relative mx-auto flex max-w-lg flex-col gap-8 px-5 py-12">
+	<div class="absolute top-5 right-5">
+		<LanguageToggle />
+	</div>
+
 	<h1 class="text-center text-display font-bold text-slate-50">{settings.t('statsTitle')}</h1>
 
 	{#if hasData}
@@ -84,7 +97,7 @@
 		<p class="text-center text-body text-slate-400">{settings.t('statsEmpty')}</p>
 	{/if}
 
-	<div class="flex justify-center">
+	<div class="flex flex-col items-center gap-4">
 		<button
 			type="button"
 			onclick={() => gameSession.backHome()}
@@ -92,5 +105,36 @@
 		>
 			{settings.t('backHome')}
 		</button>
+
+		<!-- Reset persisted stats (two-step confirm) — lives on the stats screen it affects. -->
+		{#if hasData}
+			{#if confirmReset}
+				<div class="flex flex-wrap items-center justify-center gap-3">
+					<span class="text-label text-slate-300">{settings.t('resetStatsConfirm')}</span>
+					<button
+						type="button"
+						onclick={resetStats}
+						class="text-label font-medium text-danger hover:text-danger-strong"
+					>
+						{settings.t('confirm')}
+					</button>
+					<button
+						type="button"
+						onclick={() => (confirmReset = false)}
+						class="text-label text-slate-400 hover:text-slate-200"
+					>
+						{settings.t('cancel')}
+					</button>
+				</div>
+			{:else}
+				<button
+					type="button"
+					onclick={() => (confirmReset = true)}
+					class="text-label text-danger hover:text-danger-strong"
+				>
+					{settings.t('resetStats')}
+				</button>
+			{/if}
+		{/if}
 	</div>
 </main>

@@ -1,18 +1,9 @@
 <script lang="ts">
 	import { settings } from '$lib/state/settings.svelte.js';
 	import { gameSession } from '$lib/state/game.svelte.js';
-	import { stats } from '$lib/state/stats.svelte.js';
 	import LanguageToggle from './LanguageToggle.svelte';
 
 	let newName = $state('');
-
-	// Two-step confirm for the destructive stats reset (no modal lib — inline reveal).
-	let confirmReset = $state(false);
-
-	function resetStats() {
-		stats.reset();
-		confirmReset = false;
-	}
 
 	// The engine treats `turnSeconds === 0` as "no timer". The checkbox flips between 0 and
 	// the last non-zero value so unchecking then re-checking restores the player's number.
@@ -113,6 +104,19 @@
 	<!-- Settings -->
 	<section class="flex flex-col gap-4">
 		<h2 class="text-h2 font-semibold text-slate-200">{settings.t('settings')}</h2>
+
+		<!-- Game language: the spoken/scoring language for the round, independent of the UI language. -->
+		<label class="flex flex-col gap-1.5">
+			<span class="text-label text-slate-400">{settings.t('gameLanguage')}</span>
+			<select
+				bind:value={gameSession.config.language}
+				class="rounded-control border border-line bg-surface px-3 py-2 text-body text-slate-100"
+			>
+				<option value="de">Deutsch</option>
+				<option value="en">English</option>
+			</select>
+			<span class="text-caption text-slate-500">{settings.t('gameLanguageHint')}</span>
+		</label>
 
 		<div class="flex flex-col gap-2">
 			<label class="flex items-center gap-2.5">
@@ -238,37 +242,6 @@
 				</label>
 			</div>
 		</details>
-
-		<!-- Reset persisted stats (two-step confirm) -->
-		<div class="border-t border-line pt-3">
-			{#if confirmReset}
-				<div class="flex flex-wrap items-center gap-3">
-					<span class="text-label text-slate-300">{settings.t('resetStatsConfirm')}</span>
-					<button
-						type="button"
-						onclick={resetStats}
-						class="text-label font-medium text-danger hover:text-danger-strong"
-					>
-						{settings.t('confirm')}
-					</button>
-					<button
-						type="button"
-						onclick={() => (confirmReset = false)}
-						class="text-label text-slate-400 hover:text-slate-200"
-					>
-						{settings.t('cancel')}
-					</button>
-				</div>
-			{:else}
-				<button
-					type="button"
-					onclick={() => (confirmReset = true)}
-					class="text-label text-danger hover:text-danger-strong"
-				>
-					{settings.t('resetStats')}
-				</button>
-			{/if}
-		</div>
 	</section>
 
 	<!-- Start -->

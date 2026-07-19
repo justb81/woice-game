@@ -9,12 +9,16 @@
 	import WordHistory from './WordHistory.svelte';
 	import WordInput from './WordInput.svelte';
 	import ValidationOverlay from './ValidationOverlay.svelte';
+	import LanguageToggle from './LanguageToggle.svelte';
 </script>
 
 <ValidationOverlay />
 
 <main class="mx-auto flex max-w-xl flex-col gap-6 px-5 py-8">
-	<RoundTimer />
+	<div class="flex items-start justify-between gap-4">
+		<div class="min-w-0 flex-1"><RoundTimer /></div>
+		<LanguageToggle />
+	</div>
 
 	<Scoreboard />
 

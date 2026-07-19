@@ -12,6 +12,8 @@ export type MessageKey =
 	| 'tagline'
 	| 'play'
 	| 'language'
+	| 'gameLanguage'
+	| 'gameLanguageHint'
 	| 'lobbyTitle'
 	| 'players'
 	| 'addPlayer'
@@ -84,6 +86,8 @@ export const messages: Record<Language, Messages> = {
 		tagline: 'Das Wortketten-Spiel für die Gruppe – laut gesprochen, live gewertet.',
 		play: 'Spielen',
 		language: 'Sprache',
+		gameLanguage: 'Spielsprache',
+		gameLanguageHint: 'Sprache der gesprochenen Wörter und der Wertung.',
 		lobbyTitle: 'Runde vorbereiten',
 		players: 'Spieler',
 		addPlayer: 'Hinzufügen',
@@ -153,6 +157,8 @@ export const messages: Record<Language, Messages> = {
 		tagline: 'The word-chain party game — say it out loud, scored live.',
 		play: 'Play',
 		language: 'Language',
+		gameLanguage: 'Game language',
+		gameLanguageHint: 'Language of the spoken words and scoring.',
 		lobbyTitle: 'Set up the round',
 		players: 'Players',
 		addPlayer: 'Add',
