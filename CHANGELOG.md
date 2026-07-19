@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/justb81/woice-game/compare/woice-v1.2.0...woice-v1.3.0) (2026-07-19)
+
+
+### Features
+
+* **ui:** consistent nav, home footer, and separate game language ([#43](https://github.com/justb81/woice-game/issues/43)) ([cc9f319](https://github.com/justb81/woice-game/commit/cc9f319de98991a79888110f82d5a26295d1302a))
+
 ## [1.2.0](https://github.com/justb81/woice-game/compare/woice-v1.1.0...woice-v1.2.0) (2026-07-19)
 
 
