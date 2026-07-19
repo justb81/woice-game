@@ -32,6 +32,14 @@ export interface GameConfig {
 	targetScore: number;
 	/** Normalised letter the very first turn must start with. */
 	startLetter: string;
+	/** Award extra points for rare end letters (the end-letter rarity bonus). */
+	rarityBonus: boolean;
+	/** Award a bonus for fast answers (the tempo bonus). */
+	tempoBonus: boolean;
+	/** Deduct points for reusing an end letter (the repetition malus). */
+	repetitionPenalty: boolean;
+	/** Give the round's longest word +1 point per letter at round end. */
+	longestWordBonus: boolean;
 }
 
 /** Why a turn was rejected. Ordered by the precedence `validateTurn` checks them in. */

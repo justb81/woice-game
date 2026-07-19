@@ -23,12 +23,22 @@ export const MAX_TEMPO_BONUS = 5;
 /** Points lost on an invalid turn. */
 export const ERROR_PENALTY = 3;
 
-/** Sensible defaults for a fresh lobby. */
+/**
+ * A single turn's total can never drop below this — the minus-point cap. Matches the invalid-turn
+ * penalty, so no valid word can hurt more than an outright error.
+ */
+export const MIN_TURN_SCORE = -3;
+
+/** Sensible defaults for a fresh lobby (every scoring rule on, matching the classic ruleset). */
 export const DEFAULT_CONFIG: GameConfig = {
 	language: 'en',
 	minLength: 2,
 	turnSeconds: 30,
 	roundSeconds: 0,
 	targetScore: 100,
-	startLetter: ''
+	startLetter: '',
+	rarityBonus: true,
+	tempoBonus: true,
+	repetitionPenalty: true,
+	longestWordBonus: true
 };

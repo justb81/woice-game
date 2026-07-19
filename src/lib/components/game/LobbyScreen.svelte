@@ -198,6 +198,47 @@
 			/>
 		</label>
 
+		<!-- Scoring rules (collapsible): toggle which bonuses/maluses count this round. -->
+		<details class="rounded-control border border-line bg-surface px-3 py-2">
+			<summary class="cursor-pointer text-label font-medium text-slate-300 select-none">
+				{settings.t('scoringRules')}
+			</summary>
+			<div class="mt-3 flex flex-col gap-2.5">
+				<label class="flex items-center gap-2.5">
+					<input
+						type="checkbox"
+						bind:checked={gameSession.config.rarityBonus}
+						class="size-4 rounded border-line bg-surface text-accent-strong focus:ring-accent"
+					/>
+					<span class="text-label text-slate-300">{settings.t('ruleRarityBonus')}</span>
+				</label>
+				<label class="flex items-center gap-2.5">
+					<input
+						type="checkbox"
+						bind:checked={gameSession.config.tempoBonus}
+						class="size-4 rounded border-line bg-surface text-accent-strong focus:ring-accent"
+					/>
+					<span class="text-label text-slate-300">{settings.t('ruleTempoBonus')}</span>
+				</label>
+				<label class="flex items-center gap-2.5">
+					<input
+						type="checkbox"
+						bind:checked={gameSession.config.repetitionPenalty}
+						class="size-4 rounded border-line bg-surface text-accent-strong focus:ring-accent"
+					/>
+					<span class="text-label text-slate-300">{settings.t('ruleRepetitionPenalty')}</span>
+				</label>
+				<label class="flex items-center gap-2.5">
+					<input
+						type="checkbox"
+						bind:checked={gameSession.config.longestWordBonus}
+						class="size-4 rounded border-line bg-surface text-accent-strong focus:ring-accent"
+					/>
+					<span class="text-label text-slate-300">{settings.t('longestWordBonus')}</span>
+				</label>
+			</div>
+		</details>
+
 		<!-- Reset persisted stats (two-step confirm) -->
 		<div class="border-t border-line pt-3">
 			{#if confirmReset}

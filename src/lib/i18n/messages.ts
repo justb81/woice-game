@@ -38,6 +38,12 @@ export type MessageKey =
 	| 'wordPlaceholder'
 	| 'submit'
 	| 'history'
+	| 'endRound'
+	| 'penaltyLetters'
+	| 'scoringRules'
+	| 'ruleRarityBonus'
+	| 'ruleTempoBonus'
+	| 'ruleRepetitionPenalty'
 	| 'valid'
 	| 'errorEmpty'
 	| 'errorTooShort'
@@ -104,6 +110,12 @@ export const messages: Record<Language, Messages> = {
 		wordPlaceholder: 'Wort eingeben',
 		submit: 'Absenden',
 		history: 'Wortverlauf',
+		endRound: 'Runde beenden',
+		penaltyLetters: 'Buchstaben mit Minuspunkten',
+		scoringRules: 'Punkteregeln',
+		ruleRarityBonus: 'Seltenheitsbonus',
+		ruleTempoBonus: 'Tempobonus',
+		ruleRepetitionPenalty: 'Wiederholungs-Malus',
 		valid: 'Gültig',
 		errorEmpty: 'Kein Wort erkannt.',
 		errorTooShort: 'Wort zu kurz.',
@@ -167,6 +179,12 @@ export const messages: Record<Language, Messages> = {
 		wordPlaceholder: 'Type a word',
 		submit: 'Submit',
 		history: 'Word history',
+		endRound: 'End round',
+		penaltyLetters: 'Penalty letters',
+		scoringRules: 'Scoring rules',
+		ruleRarityBonus: 'Rarity bonus',
+		ruleTempoBonus: 'Tempo bonus',
+		ruleRepetitionPenalty: 'Repetition penalty',
 		valid: 'Valid',
 		errorEmpty: 'No word detected.',
 		errorTooShort: 'Word too short.',
