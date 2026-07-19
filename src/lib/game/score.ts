@@ -45,7 +45,8 @@ export function scoreTurn({
 	// Repetition malus: every earlier use of this end letter this round makes it worth less,
 	// eventually pushing the turn's net value negative — the point is to discourage re-using letters.
 	const uses = Math.max(0, endLetterUses);
-	const rawPenalty = config.repetitionPenalty && uses > 0 ? -(uses * REPETITION_PENALTY_PER_USE) : 0;
+	const rawPenalty =
+		config.repetitionPenalty && uses > 0 ? -(uses * REPETITION_PENALTY_PER_USE) : 0;
 
 	// Cap the turn's net at MIN_TURN_SCORE. The cap is absorbed back into `penalty` so the
 	// breakdown still sums exactly (total === base + rarityBonus + tempoBonus + penalty).
