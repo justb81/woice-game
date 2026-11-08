@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/justb81/woice-game/compare/woice-v1.3.0...woice-v1.3.1) (2026-11-08)
+
+
+### Bug Fixes
+
+* upgrade @sveltejs/kit to 3.1 and adapter-static to 4.0 ([#72](https://github.com/justb81/woice-game/issues/72)) ([cde70b0](https://github.com/justb81/woice-game/commit/cde70b061e2d3477b239ca2508dc2addfa68cb26))
+
 ## [1.3.0](https://github.com/justb81/woice-game/compare/woice-v1.2.0...woice-v1.3.0) (2026-07-19)
 
 
