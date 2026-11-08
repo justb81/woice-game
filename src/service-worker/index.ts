@@ -10,16 +10,18 @@
 // A newly installed worker deliberately does NOT call skipWaiting() itself —
 // it sits in the "waiting" state so the already-open page keeps running on the
 // version it loaded, until the user opts in via the update banner (driven by
-// `$lib/state/update.svelte.ts`), which posts SKIP_WAITING below. Without this,
+// `#lib/state/update.svelte.ts`), which posts SKIP_WAITING below. Without this,
 // an update can silently take over mid-session with no way for the page to
 // know its already-executing JS is stale.
 
-import { build, files, version } from '$service-worker';
+import { immutable, assets } from '$app/manifest';
+import { asset } from '$app/paths';
+import { version } from '$app/env';
 
 const sw = self as unknown as ServiceWorkerGlobalScope;
 
 const CACHE = `woice-${version}`;
-const PRECACHE = [...build, ...files];
+const PRECACHE = [...immutable, ...assets].map(({ path }) => asset(path as never));
 
 sw.addEventListener('install', (event) => {
 	event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(PRECACHE)));

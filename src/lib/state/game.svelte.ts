@@ -1,17 +1,17 @@
 /**
  * The Session Engine: owns all live round state and drives the single-page state
  * machine (`phase`). It holds `$state`, runs the turn timer, and delegates every
- * decision to the pure `$lib/game` functions — so voice and text input funnel through
+ * decision to the pure `#lib/game` functions — so voice and text input funnel through
  * the same `submitWord` path and are scored identically. DOM-touching bits (the timer)
  * are guarded so this stays inert during SSR/prerender.
  */
 
-import { browser } from '$app/environment';
-import type { GameConfig, Phase, Player, Turn, ValidationResult } from '$lib/game/types.js';
-import { DEFAULT_CONFIG, LONGEST_WORD_BONUS_PER_LETTER, MAX_HISTORY } from '$lib/game/config.js';
-import { validateTurn } from '$lib/game/rules.js';
-import { scoreTurn, errorPenalty, projectedEndLetterScore } from '$lib/game/score.js';
-import { assignPlayerColor } from '$lib/game/playerColors.js';
+import { browser } from '$app/env';
+import type { GameConfig, Phase, Player, Turn, ValidationResult } from '#lib/game/types.js';
+import { DEFAULT_CONFIG, LONGEST_WORD_BONUS_PER_LETTER, MAX_HISTORY } from '#lib/game/config.js';
+import { validateTurn } from '#lib/game/rules.js';
+import { scoreTurn, errorPenalty, projectedEndLetterScore } from '#lib/game/score.js';
+import { assignPlayerColor } from '#lib/game/playerColors.js';
 import { settings } from './settings.svelte.js';
 import { stats } from './stats.svelte.js';
 

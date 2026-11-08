@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { settings } from '$lib/state/settings.svelte.js';
-	import { gameSession } from '$lib/state/game.svelte.js';
-	import { LONGEST_WORD_BONUS_PER_LETTER } from '$lib/game/config.js';
+	import { settings } from '#lib/state/settings.svelte.js';
+	import { gameSession } from '#lib/state/game.svelte.js';
+	import { LONGEST_WORD_BONUS_PER_LETTER } from '#lib/game/config.js';
 	import LanguageToggle from './LanguageToggle.svelte';
 
 	// Players ranked by score, highest first.

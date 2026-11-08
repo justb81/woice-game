@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { base } from '$app/paths';
-	import { settings } from '$lib/state/settings.svelte.js';
-	import { gameSession } from '$lib/state/game.svelte.js';
+	import { asset } from '$app/paths';
+	import { settings } from '#lib/state/settings.svelte.js';
+	import { gameSession } from '#lib/state/game.svelte.js';
 	import LanguageToggle from './LanguageToggle.svelte';
 
 	// Baked in at build time by Vite's `define` (see vite.config.ts).
@@ -16,7 +16,7 @@
 	</div>
 
 	<div class="flex flex-col items-center gap-4">
-		<img src="{base}/pwa-icon.svg" alt="" class="size-16" />
+		<img src={asset('pwa-icon.svg')} alt="" class="size-16" />
 		<h1 class="text-5xl font-black tracking-tight text-slate-50">{settings.t('appName')}</h1>
 		<p class="max-w-md text-body text-slate-400">{settings.t('tagline')}</p>
 	</div>

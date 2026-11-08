@@ -6,9 +6,9 @@
  * lobby lets the group set independently of the UI language.
  */
 
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 import { gameSession } from './game.svelte.js';
-import { speechLocale } from '$lib/i18n/messages.js';
+import { speechLocale } from '#lib/i18n/messages.js';
 
 class SpeechInput {
 	supported = $state(false);

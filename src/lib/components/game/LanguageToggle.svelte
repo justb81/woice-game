@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { settings } from '$lib/state/settings.svelte.js';
-	import type { Language } from '$lib/game/types.js';
+	import { settings } from '#lib/state/settings.svelte.js';
+	import type { Language } from '#lib/game/types.js';
 
 	const options: { value: Language; label: string }[] = [
 		{ value: 'de', label: 'DE' },

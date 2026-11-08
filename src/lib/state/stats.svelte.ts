@@ -2,17 +2,17 @@
  * Persistent player-stats singleton: long-term wins, favorite letters and streaks,
  * folded once per completed round and stored in localStorage so they survive reloads.
  * All browser access is guarded so this stays inert during SSR/prerender (same pattern as
- * `settings.svelte.ts`); the aggregation itself is the pure `$lib/game/stats` engine.
+ * `settings.svelte.ts`); the aggregation itself is the pure `#lib/game/stats` engine.
  */
 
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 import {
 	emptyStats,
 	recordRound,
 	STATS_SCHEMA_VERSION,
 	type RoundInput,
 	type Stats
-} from '$lib/game/stats.js';
+} from '#lib/game/stats.js';
 
 const STORAGE_KEY = 'woice.stats';
 

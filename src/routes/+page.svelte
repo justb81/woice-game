@@ -3,12 +3,12 @@
 	// page: `gameSession.phase` drives which screen shows. See docs/design.md for the
 	// product concept and CLAUDE.md for the architecture. The PWA shell (manifest,
 	// offline service worker, update banner, toasts) is wired up in the layout.
-	import { gameSession } from '$lib/state/game.svelte.js';
-	import HomeScreen from '$lib/components/game/HomeScreen.svelte';
-	import LobbyScreen from '$lib/components/game/LobbyScreen.svelte';
-	import GameScreen from '$lib/components/game/GameScreen.svelte';
-	import SummaryScreen from '$lib/components/game/SummaryScreen.svelte';
-	import StatsScreen from '$lib/components/game/StatsScreen.svelte';
+	import { gameSession } from '#lib/state/game.svelte.js';
+	import HomeScreen from '#lib/components/game/HomeScreen.svelte';
+	import LobbyScreen from '#lib/components/game/LobbyScreen.svelte';
+	import GameScreen from '#lib/components/game/GameScreen.svelte';
+	import SummaryScreen from '#lib/components/game/SummaryScreen.svelte';
+	import StatsScreen from '#lib/components/game/StatsScreen.svelte';
 </script>
 
 {#if gameSession.phase === 'home'}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { gameSession } from '$lib/state/game.svelte.js';
+	import { gameSession } from '#lib/state/game.svelte.js';
 
 	const total = $derived(gameSession.config.turnSeconds);
 	const fraction = $derived(total > 0 ? Math.max(0, gameSession.secondsLeft / total) : 0);

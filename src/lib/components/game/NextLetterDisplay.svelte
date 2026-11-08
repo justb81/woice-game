@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { settings } from '$lib/state/settings.svelte.js';
-	import { gameSession } from '$lib/state/game.svelte.js';
+	import { settings } from '#lib/state/settings.svelte.js';
+	import { gameSession } from '#lib/state/game.svelte.js';
 </script>
 
 <!-- The next start letter is the dominant visual element (see design principles). -->

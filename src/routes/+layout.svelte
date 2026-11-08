@@ -1,11 +1,11 @@
 <script lang="ts">
 	import './layout.css';
-	import Toast from '$lib/components/ui/Toast.svelte';
-	import { browser, dev, version } from '$app/environment';
-	import { base } from '$app/paths';
-	import { updateStatus } from '$lib/state/update.svelte.js';
-	import { installPrompt } from '$lib/state/install.svelte.js';
-	import { settings } from '$lib/state/settings.svelte.js';
+	import Toast from '#lib/components/ui/Toast.svelte';
+	import { browser, dev, version } from '$app/env';
+	import { asset } from '$app/paths';
+	import { updateStatus } from '#lib/state/update.svelte.js';
+	import { installPrompt } from '#lib/state/install.svelte.js';
+	import { settings } from '#lib/state/settings.svelte.js';
 
 	// An update is offered whenever a new worker is waiting (installed app or open tab); the
 	// install prompt only when the app isn't installed yet. Update takes precedence.
@@ -33,7 +33,7 @@
 	}
 </script>
 
-<svelte:head><link rel="icon" href="{base}/pwa-icon.svg" /></svelte:head>
+<svelte:head><link rel="icon" href={asset('pwa-icon.svg')} /></svelte:head>
 
 {#if showUpdate || showInstall}
 	<div class="fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 pb-4">

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { settings } from '$lib/state/settings.svelte.js';
-	import { gameSession } from '$lib/state/game.svelte.js';
+	import { settings } from '#lib/state/settings.svelte.js';
+	import { gameSession } from '#lib/state/game.svelte.js';
 </script>
 
 <ul class="flex flex-wrap justify-center gap-2">
