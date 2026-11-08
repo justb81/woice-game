@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { settings } from '$lib/state/settings.svelte.js';
-	import { gameSession } from '$lib/state/game.svelte.js';
-	import { speechInput } from '$lib/state/speech.svelte.js';
+	import { settings } from '#lib/state/settings.svelte.js';
+	import { gameSession } from '#lib/state/game.svelte.js';
+	import { speechInput } from '#lib/state/speech.svelte.js';
 
 	let word = $state('');
 	// Voice is the primary input; the text field is revealed on demand. When speech isn't

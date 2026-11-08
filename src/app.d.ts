@@ -13,7 +13,7 @@ declare global {
 	}
 
 	// Window Controls Overlay isn't in TypeScript's lib.dom.d.ts yet (Chromium-only, experimental).
-	// Used by `$lib/state/windowChrome.svelte.ts` to let an installed desktop PWA draw into the titlebar.
+	// Used by `#lib/state/windowChrome.svelte.ts` to let an installed desktop PWA draw into the titlebar.
 	interface WindowControlsOverlayGeometryChangeEvent extends Event {
 		readonly titlebarAreaRect: DOMRect;
 		readonly visible: boolean;
@@ -37,7 +37,7 @@ declare global {
 	}
 
 	// Web Speech API (SpeechRecognition) isn't in TypeScript's lib.dom.d.ts. Used by
-	// `$lib/state/speech.svelte.ts` for live voice input; feature-detected at runtime, so
+	// `#lib/state/speech.svelte.ts` for live voice input; feature-detected at runtime, so
 	// these are declared optional on Window. Only the fields Woice actually reads are typed.
 	interface SpeechRecognitionAlternative {
 		readonly transcript: string;

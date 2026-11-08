@@ -73,9 +73,9 @@ The template is deliberately thin. Three areas:
    radius aliases onto Tailwind's palette, e.g. `bg-accent-strong`, `text-danger`) — retune the
    palette there for a new app.
 
-2. **PWA infrastructure** — `src/service-worker.ts` and `src/lib/state/*.svelte.ts`.
-   - `service-worker.ts` — cache-first precache of the app shell (`build` + `files` from
-     `$service-worker`) for offline use. A newly installed worker deliberately sits in the "waiting"
+2. **PWA infrastructure** — `src/service-worker/index.ts` and `src/lib/state/*.svelte.ts`.
+   - `service-worker/index.ts` — cache-first precache of the app shell (`immutable` + `assets` from
+     `$app/manifest`) for offline use. A newly installed worker deliberately sits in the "waiting"
      state instead of calling `skipWaiting()` itself, so the open page keeps running the version it
      loaded until the user opts in.
    - `state/update.svelte.ts` — `updateStatus` singleton: detects a waiting worker and flips
@@ -102,7 +102,7 @@ in non-supporting environments (`browser` from `$app/environment`, plus feature 
 
 - **Client-only.** `+layout.ts` sets `ssr = false` + `prerender = true`; adapter-static emits a
   prerendered shell that hydrates and runs entirely in the browser.
-- **Offline.** `service-worker.ts` is auto-registered by SvelteKit in production builds (manual
+- **Offline.** `service-worker/index.ts` is auto-registered by SvelteKit in production builds (manual
   registration is off — see `vite.config.ts`); it precaches the shell and static assets cache-first.
   The manifest link and `theme-color` are in `src/app.html`; assets are `static/manifest.webmanifest`
   and `static/pwa-icon*`.
@@ -128,10 +128,10 @@ workflow needs a `RELEASE_TOKEN` repository secret (a PAT) so a created release 
 - **Runes are forced on** for all app code (everything outside `node_modules`). Use `$state` /
   `$derived` / `$props`; stores are plain classes in `.svelte.ts` files exported as singletons.
 - **Relative imports use explicit `.js` extensions** (tsconfig `rewriteRelativeImportExtensions`).
-  Use the `$lib` alias for `src/lib`.
+  Use the `#lib` subpath import (package.json `imports`) for `src/lib`.
 - **Nothing touching the DOM may run at module top-level or during SSR/prerender.** Guard with
   `browser` from `$app/environment` and feature-detect optional browser APIs.
 - **Renaming for a new app:** `name` in `package.json`, `package-name` in `release-please-config.json`,
   `name`/`short_name`/`description` in `static/manifest.webmanifest`, the `theme-color` in
   `src/app.html` + manifest, the design tokens in `src/routes/layout.css`, and the cache prefix /
-  build-log tag (`pwa-` / `[pwa]`) in `service-worker.ts` / `+layout.svelte`.
+  build-log tag (`pwa-` / `[pwa]`) in `service-worker/index.ts` / `+layout.svelte`.

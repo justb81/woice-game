@@ -62,7 +62,7 @@ body {
  * populates with the rect it isn't drawing window buttons over. Every var has a
  * fallback so this block is inert everywhere else (browser tab, non-Chromium,
  * overlay toggled off) — `[data-wco='true']` is only ever set when the overlay is
- * actually visible right now (see `$lib/state/windowChrome.svelte.ts`).
+ * actually visible right now (see `#lib/state/windowChrome.svelte.ts`).
  */
 .app-header[data-wco='true'] {
 	position: fixed;

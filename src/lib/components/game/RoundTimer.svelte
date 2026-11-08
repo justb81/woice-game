@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { settings } from '$lib/state/settings.svelte.js';
-	import { gameSession } from '$lib/state/game.svelte.js';
+	import { settings } from '#lib/state/settings.svelte.js';
+	import { gameSession } from '#lib/state/game.svelte.js';
 
 	const total = $derived(gameSession.config.roundSeconds);
 	const fraction = $derived(total > 0 ? Math.max(0, gameSession.roundSecondsLeft / total) : 0);

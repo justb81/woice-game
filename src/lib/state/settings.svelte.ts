@@ -5,9 +5,9 @@
  * so this stays inert during SSR/prerender (see `windowChrome.svelte.ts` for the pattern).
  */
 
-import { browser } from '$app/environment';
-import type { Language } from '$lib/game/types.js';
-import { messages, type MessageKey } from '$lib/i18n/messages.js';
+import { browser } from '$app/env';
+import type { Language } from '#lib/game/types.js';
+import { messages, type MessageKey } from '#lib/i18n/messages.js';
 
 const STORAGE_KEY = 'woice.language';
 

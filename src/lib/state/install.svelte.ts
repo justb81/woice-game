@@ -6,7 +6,7 @@
  * where the API is missing — Firefox, iOS, SSR, prerender — `available` stays false.
  */
 
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 
 /** The non-standard event Chromium fires; typed locally since lib.dom omits it. */
 interface BeforeInstallPromptEvent extends Event {

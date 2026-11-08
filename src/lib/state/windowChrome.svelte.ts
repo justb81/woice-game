@@ -7,7 +7,7 @@
  * in `src/routes/layout.css`.
  */
 
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 
 interface TitlebarRect {
 	x: number;

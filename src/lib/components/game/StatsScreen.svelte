@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { settings } from '$lib/state/settings.svelte.js';
-	import { gameSession } from '$lib/state/game.svelte.js';
-	import { stats } from '$lib/state/stats.svelte.js';
-	import { topWinners, globalFavoriteLetters, bestComboOverall } from '$lib/game/stats.js';
+	import { settings } from '#lib/state/settings.svelte.js';
+	import { gameSession } from '#lib/state/game.svelte.js';
+	import { stats } from '#lib/state/stats.svelte.js';
+	import { topWinners, globalFavoriteLetters, bestComboOverall } from '#lib/game/stats.js';
 	import LanguageToggle from './LanguageToggle.svelte';
 
 	const data = $derived(stats.data);
