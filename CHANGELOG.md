@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2](https://github.com/justb81/woice-game/compare/woice-v1.3.1...woice-v1.3.2) (2026-11-09)
+
+
+### Bug Fixes
+
+* **ux:** confirm End round, lobby back button, sync phases with browser history ([#75](https://github.com/justb81/woice-game/issues/75)) ([f92482e](https://github.com/justb81/woice-game/commit/f92482e0d6eb731cae59e8d937a31866b1736b10)), closes [#74](https://github.com/justb81/woice-game/issues/74)
+
 ## [1.3.1](https://github.com/justb81/woice-game/compare/woice-v1.3.0...woice-v1.3.1) (2026-11-08)
 
 
