@@ -46,7 +46,17 @@
 
 <main class="mx-auto flex max-w-2xl flex-col gap-8 px-5 py-10">
 	<header class="flex items-center justify-between">
-		<h1 class="text-display font-bold text-slate-50">{settings.t('lobbyTitle')}</h1>
+		<div class="flex items-center gap-3">
+			<button
+				type="button"
+				onclick={() => gameSession.backHome()}
+				aria-label={settings.t('backHome')}
+				class="rounded-control border border-line px-3 py-2 text-label text-slate-300 transition hover:bg-surface-raised"
+			>
+				←
+			</button>
+			<h1 class="text-display font-bold text-slate-50">{settings.t('lobbyTitle')}</h1>
+		</div>
 		<LanguageToggle />
 	</header>
 

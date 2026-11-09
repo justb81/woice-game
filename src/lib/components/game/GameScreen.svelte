@@ -10,6 +10,9 @@
 	import WordInput from './WordInput.svelte';
 	import ValidationOverlay from './ValidationOverlay.svelte';
 	import LanguageToggle from './LanguageToggle.svelte';
+
+	// Two-step confirm (same inline pattern as the stats reset).
+	let confirmEnd = $state(false);
 </script>
 
 <ValidationOverlay />
@@ -17,13 +20,33 @@
 <main class="mx-auto flex max-w-xl flex-col gap-6 px-5 py-8">
 	<!-- Top controls stay reachable without scrolling past the word history below. -->
 	<div class="flex items-center justify-between gap-3">
-		<button
-			type="button"
-			onclick={() => gameSession.endRound()}
-			class="rounded-control border border-line px-4 py-2 text-label font-medium text-slate-300 transition hover:bg-surface-raised"
-		>
-			{settings.t('endRound')}
-		</button>
+		{#if confirmEnd}
+			<div class="flex items-center gap-3">
+				<span class="text-label text-slate-300">{settings.t('endRoundConfirm')}</span>
+				<button
+					type="button"
+					onclick={() => gameSession.endRound()}
+					class="text-label font-medium text-danger hover:text-danger-strong"
+				>
+					{settings.t('confirm')}
+				</button>
+				<button
+					type="button"
+					onclick={() => (confirmEnd = false)}
+					class="text-label text-slate-400 hover:text-slate-200"
+				>
+					{settings.t('cancel')}
+				</button>
+			</div>
+		{:else}
+			<button
+				type="button"
+				onclick={() => (confirmEnd = true)}
+				class="rounded-control border border-line px-4 py-2 text-label font-medium text-slate-300 transition hover:bg-surface-raised"
+			>
+				{settings.t('endRound')}
+			</button>
+		{/if}
 		<LanguageToggle />
 	</div>
 
