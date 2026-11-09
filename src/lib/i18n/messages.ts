@@ -41,6 +41,7 @@ export type MessageKey =
 	| 'submit'
 	| 'history'
 	| 'endRound'
+	| 'endRoundConfirm'
 	| 'penaltyLetters'
 	| 'scoringRules'
 	| 'ruleRarityBonus'
@@ -115,6 +116,7 @@ export const messages: Record<Language, Messages> = {
 		submit: 'Absenden',
 		history: 'Wortverlauf',
 		endRound: 'Runde beenden',
+		endRoundConfirm: 'Runde wirklich beenden?',
 		penaltyLetters: 'Buchstaben mit Minuspunkten',
 		scoringRules: 'Punkteregeln',
 		ruleRarityBonus: 'Seltenheitsbonus',
@@ -186,6 +188,7 @@ export const messages: Record<Language, Messages> = {
 		submit: 'Submit',
 		history: 'Word history',
 		endRound: 'End round',
+		endRoundConfirm: 'Really end the round?',
 		penaltyLetters: 'Penalty letters',
 		scoringRules: 'Scoring rules',
 		ruleRarityBonus: 'Rarity bonus',
